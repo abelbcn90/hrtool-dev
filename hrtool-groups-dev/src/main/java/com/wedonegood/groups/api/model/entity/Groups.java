@@ -7,8 +7,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.wedonegood.common.client.Client;
 import com.wedonegood.groups.calendar.api.model.entity.Calendar;
-import com.wedonegood.groups.client.entity.Client;
 import com.wedonegood.groups.model.common.BaseEntity;
 import com.wedonegood.groups.working.hours.api.model.entity.WorkingHours;
 

@@ -8,6 +8,7 @@ spring:
   jpa:
     database: MYSQL
     hibernate:
+      #ddl-auto: update
       ddl-auto: validate
   datasource:
     url: jdbc:mysql://82.221.22.223:3306/hrtool

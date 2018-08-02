@@ -8,6 +8,7 @@
     <h2><th:block th:utext="${uic.getUserEmail()}"/></h2>
     <p>Click <a th:href="@{/logout}">here</a> to logout</p>
     <h3><th:block th:utext="${uic.getAuthorities()}"/></h3>
+    <h2>Client: <th:block th:utext="${uic.getClientId()}"/></h2>
     
     <h1>Menu links</h1>
     <ul>

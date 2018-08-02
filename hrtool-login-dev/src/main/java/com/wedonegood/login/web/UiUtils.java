@@ -1,13 +1,14 @@
 package com.wedonegood.login.web;
 
-import com.wedonegood.login.security.RoleEnum;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.wedonegood.common.security.RoleEnum;
 
 public class UiUtils {
 

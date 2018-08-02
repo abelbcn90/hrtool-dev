@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.wedonegood.roles.api.model.entity.Client;
+import com.wedonegood.common.client.Client;
 import com.wedonegood.roles.api.model.entity.Role;
 
 /**
@@ -18,6 +18,7 @@ public interface RoleService {
     Role save(final Role role);
     Role get(final long roleId);
     List<Role> list();
+    List<Role> findAllByClientAndActiveIsTrue(final Client client);
 //    List<Role> findRolesByUserId(final long userId);
     void delete(final Long roleId);
 }

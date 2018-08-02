@@ -2,7 +2,7 @@ package com.wedonegood.roles.rest.common;
 
 import java.security.Principal;
 
-import com.wedonegood.roles.api.model.entity.Client;
+import com.wedonegood.common.client.Client;
 
 public abstract class RestController {
 

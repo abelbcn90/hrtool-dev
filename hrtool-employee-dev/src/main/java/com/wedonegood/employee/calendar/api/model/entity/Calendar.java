@@ -5,8 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
+import com.wedonegood.common.client.Client;
 import com.wedonegood.employee.model.common.BaseEntity;
-import com.wedonegood.groups.client.entity.Client;
 
 @Entity
 public class Calendar extends BaseEntity {

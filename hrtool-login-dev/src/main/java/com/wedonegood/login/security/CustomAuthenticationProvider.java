@@ -10,7 +10,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.wedonegood.login.model.user.UserService;
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.security.UserInfoContextImpl;
 import com.wedonegood.login.otp.OTPService;
 import com.wedonegood.login.security.exception.WarnBadCredentialsException;
 

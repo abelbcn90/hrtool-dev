@@ -3,8 +3,8 @@ package com.wedonegood.employee.rest.v1.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
-import com.wedonegood.employee.user.rest.dto.UserDto;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
 
 import io.swagger.annotations.ApiModel;
@@ -47,7 +47,7 @@ public class EmployeeDto {
     private Long permitId;
     
     @ApiModelProperty(value = "Employee contratId", position = 12)
-    private Long contratId;
+    private Long contractId;
     
     @ApiModelProperty(value = "Employee jobPosition", position = 13)
     private String jobPosition;
@@ -111,7 +111,7 @@ public class EmployeeDto {
     	this.birthday = employee.getBirthday();
     	this.passportScan = employee.getPassportScan();
     	this.permitId = employee.getPermit().getId();
-    	this.contratId = employee.getContract().getId();
+    	this.contractId = employee.getContract().getId();
     	this.jobPosition = employee.getJobPosition();
     	this.bilingId = employee.getBiling().getId();
     	this.hireDate = employee.getHireDate();
@@ -120,7 +120,7 @@ public class EmployeeDto {
     	this.vacationAllowance = employee.getVacationAllowance();
     	this.vacationTaken = employee.getVacationTaken();
     	this.sicknessTaken = employee.getSicknessTaken();
-    	this.managerId = employee.getManager().getUserId();
+//    	this.managerId = employee.getManager().getUserId();
     	
         this.active = employee.isActive();
         this.createdDate = employee.getCreatedDate();
@@ -288,17 +288,17 @@ public class EmployeeDto {
 	}
 
 	/**
-	 * @return the contratId
+	 * @return the contractId
 	 */
-	public Long getContratId() {
-		return contratId;
+	public Long getContractId() {
+		return contractId;
 	}
 
 	/**
-	 * @param contratId the contratId to set
+	 * @param contractId the contractId to set
 	 */
-	public void setContratId(Long contratId) {
-		this.contratId = contratId;
+	public void setContractId(Long contractId) {
+		this.contractId = contractId;
 	}
 
 	/**

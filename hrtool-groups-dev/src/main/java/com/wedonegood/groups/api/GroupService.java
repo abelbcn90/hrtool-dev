@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.wedonegood.common.client.Client;
 import com.wedonegood.groups.api.model.entity.Groups;
-import com.wedonegood.groups.client.entity.Client;
 
 /**
  * @author Abel Pulido Ponce

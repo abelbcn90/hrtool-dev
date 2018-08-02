@@ -5,8 +5,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.wedonegood.employee.user.api.model.entity.User;
-import com.wedonegood.login.model.user.UserService;
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.security.RoleEnum;
+import com.wedonegood.common.security.UserInfoContextImpl;
+import com.wedonegood.common.user.api.model.entity.User;
 
 public class CustomAuthenticationService implements UserDetailsService {
 

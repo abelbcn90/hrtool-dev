@@ -30,6 +30,16 @@
 			<artifactId>hrtool-groups-dev</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.wedonegood</groupId>
+			<artifactId>hrtool-roles-dev</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.wedonegood</groupId> -->
+<!-- 			<artifactId>hrtool-login-dev</artifactId> -->
+<!-- 			<version>0.0.1-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 	</dependencies>
 
 </project>

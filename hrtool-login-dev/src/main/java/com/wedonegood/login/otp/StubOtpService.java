@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.wedonegood.employee.user.api.model.entity.User;
-import com.wedonegood.login.model.user.UserService;
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.user.api.model.entity.User;
 
 //@Service
 public class StubOtpService implements OTPService {

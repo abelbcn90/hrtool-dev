@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
+import com.wedonegood.common.client.Client;
 import com.wedonegood.roles.model.common.BaseEntity;
 
 /**

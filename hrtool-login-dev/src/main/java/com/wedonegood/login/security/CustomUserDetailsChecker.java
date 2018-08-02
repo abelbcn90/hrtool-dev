@@ -6,6 +6,7 @@ import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsChecker;
 
+import com.wedonegood.common.security.UserInfoContextImpl;
 import com.wedonegood.login.security.exception.NoPnone;
 
 public class CustomUserDetailsChecker implements UserDetailsChecker {

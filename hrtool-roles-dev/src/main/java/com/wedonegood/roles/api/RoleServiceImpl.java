@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.wedonegood.roles.api.model.entity.Client;
+import com.wedonegood.common.client.Client;
 import com.wedonegood.roles.api.model.entity.Role;
 import com.wedonegood.roles.api.model.repository.RoleRepository;
 
@@ -50,6 +50,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> list() {
         return this.roleRepository.findAll();
+    }
+    
+    @Override
+    public List<Role> findAllByClientAndActiveIsTrue(final Client client) {
+    	return this.roleRepository.findAllByClientAndActiveIsTrue(client);
     }
     
 //    @Override

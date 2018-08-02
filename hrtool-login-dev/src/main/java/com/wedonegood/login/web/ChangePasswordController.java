@@ -1,9 +1,9 @@
 package com.wedonegood.login.web;
 
-import com.wedonegood.login.model.user.UserService;
-import com.wedonegood.login.security.RoleEnum;
-import com.wedonegood.login.security.UserInfoContext;
-import com.wedonegood.login.web.dto.Passwords;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.security.RoleEnum;
+import com.wedonegood.common.security.UserInfoContext;
+import com.wedonegood.login.web.dto.Passwords;
 
 @Controller
 public class ChangePasswordController {

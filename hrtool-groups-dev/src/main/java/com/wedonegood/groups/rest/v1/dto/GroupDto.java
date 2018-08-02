@@ -50,12 +50,13 @@ public class GroupDto {
      */
     
     public GroupDto() {
+    	
     }
     
     public GroupDto(final Long groupId) {
     	this.groupId = groupId;
     }
-
+    
     public GroupDto(final Groups group) {
     	this.groupId = group.getId();
     	this.name = group.getName();

@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
-import com.wedonegood.groups.client.entity.Client;
+import com.wedonegood.common.client.Client;
 import com.wedonegood.groups.model.common.BaseEntity;
 
 @Entity

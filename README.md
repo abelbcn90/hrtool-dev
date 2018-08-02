@@ -1,2 +1,0 @@
-# hrtool-dev
-HRTool-dev

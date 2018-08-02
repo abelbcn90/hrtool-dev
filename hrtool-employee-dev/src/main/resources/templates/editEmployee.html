@@ -38,89 +38,135 @@
 		</div>
 		
 		<form id="editEmployeeForm" action="#">
-			<div style="width: 25%; float: left; margin-left: 25px; text-align: center; background-color: orange;">
+			<div style="width: 31%; float: left; margin-left: 25px; text-align: center; background-color: orange;">
+				<div style="width: 100%; text-align: center;">
+					<span>Personal Information</span>
+				</div>
+				
 				<input type="hidden" id="employeeId" name="employeeId" th:field="*{employee.employeeId}" th:value=*{employee.employeeId} />
 				<input type="hidden" id="userId" name="userId" th:field="*{employee.user.userId}" th:value=*{employee.user.userId} />
 				<div>
-					<input type="text" id="number" name="number" placeholder="Contract number" th:field="*{employee.number}" th:value="*{employee.number}" />
+					<input type="text" placeholder="Contract number" th:field="*{employee.number}" />
 				</div>
 				<div>
-					<input type="text" id="userFirstName" name="userFirstName" placeholder="Name" th:field="*{employee.user.userFirstName}" th:value="*{employee.user.userFirstName}" />
+					<input type="text" id="userFirstName" name="userFirstName" placeholder="Name" th:field="*{employee.user.userFirstName}" />
 				</div>
 				<div>
-					<input type="text" id="userLastName" name="userLastName" placeholder="Last Name" th:field="*{employee.user.userLastName}" th:value="*{employee.user.userLastName}" />
+					<input type="text" id="userLastName" name="userLastName" placeholder="Last Name" th:field="*{employee.user.userLastName}" />
 				</div>
 				<div>
-					<input type="text" id="nin" name="nin" placeholder="Number of NIN" th:field="*{employee.nin}" th:value="*{employee.nin}" />
+					<input type="text" placeholder="Number of NIN" th:field="*{employee.nin}" th:value="*{employee.nin}" />
 				</div>
 				<div>
-					<input type="email" id="userEmail" name="userEmail" placeholder="Email address" th:field="*{employee.user.userEmail}" th:value="*{employee.user.userEmail}" />
+					<input type="text" id="userPhone" name="userPhone" placeholder="Phone number" th:field="*{employee.user.userPhone}" />
 				</div>
 				<div>
-					<input type="text" id="userPhone" name="userPhone" placeholder="Phone number" th:field="*{employee.user.userPhone}" th:value="*{employee.user.userPhone}" />
+					<input type="text" placeholder="Address" th:field="*{employee.address}" />
 				</div>
 				<div>
-					<input type="text" id="address" name="address" placeholder="Address" th:field="*{employee.address}" th:value="*{employee.address}" />
+					<input type="text" placeholder="Country" th:field="*{employee.country}" />
 				</div>
 				<div>
-					<input type="text" id="country" name="country" placeholder="Country" th:field="*{employee.country}" th:value="*{employee.country}" />
+					<input type="text" placeholder="City" th:field="*{employee.city}" />
 				</div>
 				<div>
-					<input type="text" id="city" name="city" placeholder="City" th:field="*{employee.city}" th:value="*{employee.city}" />
+					<input type="text" placeholder="Postal code" th:field="*{employee.postalCode}" />
 				</div>
 				<div>
-					<input type="text" id="postalCode" name="postalCode" placeholder="Postal code" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<input type="date" placeholder="Select birthday" th:field="*{employee.birthday}" />
 				</div>
 				<div>
-					<input type="date" id="birthday" name="birthday" placeholder="Select birthday" th:field="*{employee.birthday}" th:value="*{employee.birthday}" />
-				</div>
-				<div>
-					<input type="file" id="passportScan" name="passportScan" th:field="*{employee.passportScan}" th:value="*{employee.passportScan}" />
+					<input type="file" th:field="*{employee.passportScan}" />
 				</div>
 			</div>
 			
-			<div style="width: 25%; float: left; text-align: center; background-color: lightblue;">
+			<div style="width: 31%; float: left; text-align: center; background-color: lightblue;">
+				<div style="width: 100%; text-align: center;">
+					<span>Job details</span>
+				</div>
+				
 				<div>
-					<input type="text" id="permit" name="permit" placeholder="Work permit" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
-					<input type="text" id="contract" name="contract" placeholder="Contract type" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<select th:field="*{employee.permitId}" th:remove="all-but-first">
+		                <option th:each="p : ${permitList}" th:value="${p.id}" th:text="${p.name}">Permit</option>
+		            </select>
+					<select th:field="*{employee.contractId}" th:remove="all-but-first">
+		                <option th:each="c : ${contractList}" th:value="${c.id}" th:text="${c.name}">Contract</option>
+		            </select>
 				</div>
 				<div>
-					<input type="text" id="jobPosition" name="jobPosition" placeholder="Job position" th:field="*{employee.jobPosition}" th:value="*{employee.jobPosition}" />
-					<input type="text" id="biling" name="biling" placeholder="Biling type" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<input type="text" placeholder="Job position" th:field="*{employee.jobPosition}" />
+					<select th:field="*{employee.bilingId}" th:remove="all-but-first">
+		                <option th:each="b : ${bilingList}" th:value="${b.id}" th:text="${b.name}">Biling</option>
+		            </select>
 				</div>
 				<div>
-					<input type="date" id="hireDate" name="hireDate" placeholder="Select hire date" th:field="*{employee.hireDate}" th:value="*{employee.hireDate}" />
-					<input type="number" id="salary" name="salary" placeholder="Salary rate" th:field="*{employee.salary}" th:value="*{employee.salary}" />
+					<input type="date" placeholder="Select hire date" th:field="*{employee.hireDate}" />
+					<input type="number" placeholder="Salary rate" th:field="*{employee.salary}" />
 				</div>
 				<div>
-					<select id="group" name="group" th:field="*{employee.group}" th:remove="all-but-first">
+					<select th:field="*{employee.group}" th:remove="all-but-first">
 		                <option th:each="g : ${groupList}" th:value="${g.id}" th:text="${g.name}">Group</option>
 		            </select>
-					<input type="text" id="postalCode" name="postalCode" placeholder="Rosclar" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<input type="text" id="client" name="client" placeholder="Rosclar" />
 				</div>
 				<div>
-					<input type="number" id="vacationAllowance" name="vacationAllowance" placeholder="Number of days per year" th:field="*{employee.vacationAllowance}" th:value="*{employee.vacationAllowance}" />
+					<input type="number" placeholder="Number of days per year" th:field="*{employee.vacationAllowance}" />
 				</div>
 			</div>
 			
-			<div style="width: 25%; float: left; text-align: center; background-color: lightgreen;">
-				<div>
-					<input type="text" id="postalCode" name="postalCode" placeholder="Email login" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
-					<input type="text" id="postalCode" name="postalCode" placeholder="Select role" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+			<div style="width: 31%; float: left; text-align: center; background-color: lightgreen;">
+				<div style="width: 100%; text-align: center;">
+					<span>User role</span>
 				</div>
-				<div>
-					<input type="password" id="password" name="password" placeholder="Password" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
-					<span>Roles list</span>
+				
+				<div style="width: 33%; float: left; text-align: center;">
+					<div>
+						<input type="text" id="userEmail" name="userEmail" placeholder="Email login" th:field="*{employee.user.userEmail}" th:value="*{employee.user.userEmail}" />
+					</div>
+					<div>
+						<input type="password" id="password" name="password" placeholder="Password" th:field="*{employee.user.password}" th:value="*{employee.user.password}" />
+					</div>
+					<div>
+						<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" th:value="*{employee.user.password}" />
+					</div>
+					<div>
+						<select id="language" name="language" th:field="*{employee.user.languageCode}" th:value="*{employee.user.languageCode}" th:remove="all-but-first">
+			                <option th:each="l : ${languageList}" th:value="${l.code}" th:text="${l.description}">Language</option>
+			            </select>
+					</div>
 				</div>
-				<div>
-					<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
-					<span>Groups list</span>
+				
+				<div style="width: 33%; float: left; text-align: center; background-color: red;">
+					<div style="width: 100%; text-align: center;">
+						<span>Roles selected</span>
+					</div>
+					
+					<div>
+						<select id="role" name="role" th:remove="all-but-first">
+			                <option th:each="r : ${roleList}" th:value="${r.id}" th:text="${r.name}">Role</option>
+			            </select>
+		            </div>
+		            <div>
+		            	<span>Roles selected</span>
+		            </div>
 				</div>
-				<div>
-					<input type="text" id="postalCode" name="postalCode" placeholder="Language preference" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
-					<span>Groups list</span>
+				
+				<div style="width: 33%; float: left; text-align: center; background-color: pink;">
+					<div style="width: 100%; text-align: center;">
+						<span>Groups selected</span>
+					</div>
+					
+					<div>
+						<select id="groupRole" name="groupRole" th:remove="all-but-first">
+			                <option th:each="g : ${groupList}" th:value="${g.id}" th:text="${g.name}">Group</option>
+			            </select>
+		            </div>
+		            <div>
+						<span>Groups selected</span>
+					</div>
 				</div>
 			</div>
+			
 			
 			<hr />
 			
@@ -149,6 +195,8 @@
 				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
 					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
 					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+					      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
+					      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
 				      	+ '} '
 			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
 		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
@@ -158,7 +206,20 @@
 				    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
 				    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
 				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
-				    + ', "group" : "'+ $('#editEmployeeForm').find('#group').val() + '"'
+				    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
+				    // Job details
+				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
+				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
+				    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
+				    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+				    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
+				    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
+				    + ', "group" : '
+			    		+ '{'
+			    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
+			    		+ '} '
+				    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
+				    // User Role
 		      	+ '}';
 
 			    console.log(formDataJson);
@@ -194,6 +255,8 @@
 				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
 					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
 					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+					      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
+					      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
 				      	+ '} '
 			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
 		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
@@ -205,17 +268,19 @@
 				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
 				    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
 				    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
-				    
-// 				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permit').val() + '"'
-// 				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contract').val() + '"'
-				    + ', "jobPosition" : "'+ $('#editEmployeeForm').find('#jobPosition').val() + '"'
-// 				    + ', "bilingId" : "'+ $('#editEmployeeForm').find('#biling').val() + '"'
-				    + ', "hireDate" : "'+ $('#editEmployeeForm').find('#hireDate').val() + '"'
-				    + ', "group" : "'+ $('#editEmployeeForm').find('#group').val() + '"'
-// 				    client
+				    // Job details
+				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
+				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
+				    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
+				    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+				    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
+				    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
+				    + ', "group" : '
+			    		+ '{'
+			    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
+			    		+ '} '
 				    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
-
-// 				    + ', "emailLogin" : "'+ $('#editEmployeeForm').find('#emailLogin').val() + '"'
+				    // User Role
 		      	+ '}';
 
 			    console.log(formDataJson);

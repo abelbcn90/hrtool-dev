@@ -58,6 +58,11 @@
 	        <artifactId>hrtool-employee-dev</artifactId>
 	        <version>0.0.1-SNAPSHOT</version>
     	</dependency>
+		<dependency>
+	        <groupId>com.wedonegood</groupId>
+	        <artifactId>hrtool-common-dev</artifactId>
+	        <version>0.0.1-SNAPSHOT</version>
+    	</dependency>
 	</dependencies>
 
 	<build>

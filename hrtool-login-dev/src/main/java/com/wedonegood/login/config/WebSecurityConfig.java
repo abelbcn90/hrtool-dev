@@ -12,11 +12,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.wedonegood.common.security.RoleEnum;
 import com.wedonegood.login.security.CustomAuthenticationFailureHandler;
 import com.wedonegood.login.security.CustomAuthenticationProvider;
 import com.wedonegood.login.security.CustomAuthenticationService;
 import com.wedonegood.login.security.CustomUserDetailsChecker;
-import com.wedonegood.login.security.RoleEnum;
 
 @Configuration
 @EnableWebSecurity

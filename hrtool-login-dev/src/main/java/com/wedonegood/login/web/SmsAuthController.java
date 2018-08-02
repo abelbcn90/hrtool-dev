@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wedonegood.login.model.user.UserService;
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.security.RoleEnum;
+import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.login.otp.OTPService;
-import com.wedonegood.login.security.RoleEnum;
-import com.wedonegood.login.security.UserInfoContext;
 import com.wedonegood.roles.api.FunctionService;
 
 @Controller

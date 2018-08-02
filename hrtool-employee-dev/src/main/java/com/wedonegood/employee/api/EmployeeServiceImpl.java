@@ -21,17 +21,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return this.employeeRepository.findAllByActiveIsTrue(pageable);
     }
 
-//    @Override
-//    public Page<Employee> getEmployees(Client client, Pageable pageable) {
-//        return this.employeeRepository.findAllByClientAndActiveIsTrue(client, pageable);
-//    }
+    @Override
+    public Page<Employee> getEmployees(Long client, Pageable pageable) {
+        return this.employeeRepository.findAllByClientAndActiveIsTrue(client, pageable);
+    }
 
     public List<Employee> getActiveEmployee() {
         return employeeRepository.findEmployeeByActiveIsTrue();
     }
 
     public Employee getEmployee(long userId) {
-        return employeeRepository.findEmployeeByUser_UserIdAndActiveIsTrue(userId);
+//        return employeeRepository.findEmployeeByUser_UserIdAndActiveIsTrue(userId);
+        return employeeRepository.findEmployeeByUserIdAndActiveIsTrue(userId);
     }
     
     @Override

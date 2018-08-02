@@ -9,7 +9,7 @@ import com.wedonegood.employee.api.model.entity.Employee;
 
 public interface EmployeeService {
 	Page<Employee> getEmployees(Pageable pageable);
-//    Page<Employee> getEmployees(Client client, Pageable pageable);
+    Page<Employee> getEmployees(Long client, Pageable pageable);
     List<Employee> getActiveEmployee();
     Employee getEmployee(long userId);
     Employee save(final Employee employee);

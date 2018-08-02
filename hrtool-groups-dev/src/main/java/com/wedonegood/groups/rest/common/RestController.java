@@ -2,7 +2,7 @@ package com.wedonegood.groups.rest.common;
 
 import java.security.Principal;
 
-import com.wedonegood.groups.client.entity.Client;
+import com.wedonegood.common.client.Client;
 
 public abstract class RestController {
 

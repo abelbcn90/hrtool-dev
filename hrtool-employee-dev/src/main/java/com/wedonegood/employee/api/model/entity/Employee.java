@@ -8,9 +8,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.wedonegood.biling.Biling;
+import com.wedonegood.common.user.api.model.entity.User;
+import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;
-import com.wedonegood.employee.user.api.model.entity.User;
 import com.wedonegood.groups.api.model.entity.Groups;
+import com.wedonegood.permit.Permit;
 
 @Entity
 public class Employee extends BaseEntity {
