@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<html lang="" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+	<meta name="description" content="description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+
+	<title th:text="#{roles.title}">HR Tool - Edit Roles</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	
+	<!-- scripts/index.js -->
+<!-- 	<script src="scripts/index.js"></script> -->
+
+<!-- 	<link th:replace="headLinks"></link> -->
+</head>
+<body>
+	<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+		<a th:href="@{/en/roles}"><span th:text="#{lang.en}">English</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/fr/roles}"><span th:text="#{lang.fr}">French</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/es/roles}"><span th:text="#{lang.es}">Spanish</span></a>
+    </div>
+
+	<br />
+	
+	<div style="height: 50%; width: 100%;">
+		<div style="background-color: YELLOW;">
+			<div style="position: absolute;">
+				<span th:text="#{roles.button.edit}"></span>
+			</div>
+			<div style="text-align: right; position: relative;">
+				<a th:href="@{/en/roles}" class="btn btn-outline-dark"><span th:text="#{roles.button.cancel}">Cancel</span></a>
+				<button type="button" id="add" name="add" class="btn btn-primary" th:value="${role.roleId}" th:text="ADD"></button>
+				<button type="button" id="update" name="update" class="btn btn-primary" th:value="${role.roleId}" th:text="UPDATE"></button>
+			</div>
+		</div>
+		
+		<form id="editRolesForm" action="#">
+			<input type="hidden" id="roleId" name="roleId" th:field="${role.roleId}" th:value=${role.roleId} />
+			<div>
+				<input type="text" id="name" name="name" th:field="${role.name}" th:value="${role.name}" />
+			</div>
+			
+			<hr />
+			
+			<div style="background-color: lightblue; width: 100%;">
+				<div>
+					<span th:text="#{roles.functionalities.title} + ' ' + #{roles.functionalities.title.desc}"></span>
+				</div>
+				<div style="background-color: ORANGE;">
+					<ul>
+						<li th:each="function : ${functionList}">
+							<input type="checkbox" id="functionsCB" name="functionsCB" th:field="${role.functions}" th:value="${function.functionId}" th:text="${function.description}" />
+						</li>
+					</ul>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			console.log('Hello from editRoles.html');
+		});
+	
+		$( "#add" ).on( "click", function( event ) {
+			alert('Add Role');
+
+			var myCheckboxes = [];
+			$("input:checked").each(function() {
+			   	myCheckboxes.push(
+				   '{"functionId" : ' + $(this).val() + '}'
+				);
+			});
+
+			var formDataJson = '{'
+			      + '"roleId" : "' + $('#editRolesForm').find('#roleId').val() + '"'
+			      + ', "name" : "' + $('#editRolesForm').find('#name').val() + '"'
+			      + ', "functions" : '
+			      	+ '[' + myCheckboxes + ']'
+		      	+ '}';
+
+			    console.log(formDataJson);
+
+			jQuery.ajax({
+				method: 'PUT',
+				headers: {
+					'X-Auth-Client': '1'
+				},
+				data: formDataJson,
+				dataType: 'json',
+				contentType: 'application/json',
+				url: "/api/v1/role/",
+				error : function(err) {
+					console.log('Error!');
+					console.log(err);
+				},
+				success: function(data) {
+					alert("success: " + data);
+				}
+			});
+		});
+
+		$( "#update" ).on( "click", function( event ) {
+			alert('Update Role');
+
+			var myCheckboxes = [];
+			$("input:checked").each(function() {
+			   	myCheckboxes.push(
+				   '{"functionId" : ' + $(this).val() + '}'
+				);
+			});
+
+			var formDataJson = '{'
+			      + '"roleId" : "' + $('#editRolesForm').find('#roleId').val() + '"'
+			      + ', "name" : "' + $('#editRolesForm').find('#name').val() + '"'
+			      + ', "functions" : '
+			      	+ '[' + myCheckboxes + ']'
+		      	+ '}';
+
+			    console.log(formDataJson);
+
+			jQuery.ajax({
+				method: 'PATCH',
+				headers: {
+					'X-Auth-Client': '1'
+				},
+				data: formDataJson,
+				dataType: 'json',
+				contentType: 'application/json',
+				url: "/api/v1/role/",
+				error : function(err) {
+					console.log('Error!');
+					console.log(err);
+				},
+				success: function(data) {
+					alert("success: " + data);
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Internal page</title>
+</head>
+<body>
+    <h1>Hello <th:block th:utext="${uic.userFirstName} + ' ' + ${uic.userLastName}"/>!</h1>
+    <h2><th:block th:utext="${uic.getUserEmail()}"/></h2>
+    <p>Click <a th:href="@{/logout}">here</a> to logout</p>
+</body>
+</html>

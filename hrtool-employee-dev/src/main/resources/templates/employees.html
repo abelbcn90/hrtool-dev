@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html lang="" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+	<meta name="description" content="description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+
+	<title th:text="#{employees.title}">HR Tool - Employee</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	
+</head>
+<body>
+	<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+		<a th:href="@{/en/employees}"><span th:text="#{lang.en}">English</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/fr/employees}"><span th:text="#{lang.fr}">French</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/es/employees}"><span th:text="#{lang.es}">Spanish</span></a>
+    </div>
+
+	<div style="background-color: GRAY; text-align: right;">
+		<a th:href="@{/en/employees/new}" class="btn btn-primary"><span th:text="'+ ' + #{employees.button.add}">+ NEW EMPLOYEE</span></a>
+	</div>
+	
+	<div style="height: 50%; width: 100%; overflow: hidden;">
+		<div style="background-color: YELLOW;">
+			<div>
+				<span th:text="#{employees.title}"></span>
+			</div>
+		</div>
+		<div style="width: 100%; float: left;">
+			<hr />
+			<div style="text-align: center; float: left; width: 25%;">
+				<span th:text="#{employees.name}"></span>
+			</div>
+			<div style="text-align: center; float: left; width: 25%;">
+				<span th:text="#{employees.functionalities.number}"></span>
+			</div>
+			<div style="text-align: center; float: left; width: 25%;">
+				<span th:text="#{employees.action}"></span>
+			</div>
+			<div style="text-align: center; float: left; width: 25%;">
+				<span th:text="#{employees.action}"></span>
+			</div>
+			<hr />
+			<ul style="list-style-type: none;">
+				<li th:each="employee : ${employeeList}">
+					<div style="text-align: left; float: left; width: 25%;">
+						<span th:text="${employee.user.userFirstName + ' ' + employee.user.userLastName}">Admin Client</span>
+					</div>
+					<div style="text-align: center; float: left;  width: 25%;">
+						<span th:text="${employee.jobPosition}">8</span>
+						<span>&nbsp;</span>
+					</div>
+					<div style="text-align: center; float: left;  width: 25%;">
+						<span th:text="${employee.group.name}">8</span>
+					</div>
+					<div style="text-align: center; float: left;  width: 25%;">
+						<a th:href="@{'/en/employees/edit/' + ${employee.id}}" class="btn btn-outline-primary btn-sm"><span th:text="#{employees.button.edit}">Edit</span></a>
+						<button type="button" id="delete" name="delete" th:value="${employee.id}" class="btn btn-danger btn-sm">
+				          <i class="far fa-trash-alt"></i>
+				        </button>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<div id="resultJSDIV"></div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+ 		$( document ).ready(function() {
+ 			console.log('Hello from employees.html');
+
+ 			jQuery.ajax({
+				method: 'GET',
+				headers: {
+					'X-Auth-Client': '1'
+				},
+				dataType: 'json',
+				contentType: 'application/json',
+				url: "/api/v1/employee/list/0",
+				error : function(err) {
+					console.log('Error!');
+					console.log(err);
+				},
+				success: function(data_success) {
+// 					alert("success: " + JSON.stringify(data_success));
+					$("#resultJSDIV").text(JSON.stringify(data_success, null, '\t'));
+				}
+			});
+ 		});
+
+ 		$('.btn-danger').on('click', function(data) {
+ // 			alert($(this).attr("value"));
+
+ 			jQuery.ajax({
+ 				method: 'DELETE',
+ 				headers: {
+ 					'X-Auth-Client': '1'
+ 				},
+ 				dataType: 'json',
+ 				contentType: 'application/json',
+ 				url: "/api/v1/employee/" + $(this).attr("value"),
+ 				error : function(err) {
+ 					console.log('Error!');
+ 					console.log(err);
+ 				},
+ 				success: function(data_success) {
+// 					alert("success: " + JSON.stringify(data_success));
+					$("#resultJSDIV").text(JSON.stringify(data_success, null, '\t'));
+				}
+ 			});
+
+ 		});
+ 	</script>
+</body>
+</html>

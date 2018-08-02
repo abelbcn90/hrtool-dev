@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Internal page</title>
+</head>
+<body>
+    <h1>Hello <th:block th:utext="${uic.userFirstName} + ' ' + ${uic.userLastName}"/>!</h1>
+    <h2><th:block th:utext="${uic.getUserEmail()}"/></h2>
+    <p>Click <a th:href="@{/logout}">here</a> to logout</p>
+    <h3><th:block th:utext="${uic.getAuthorities()}"/></h3>
+    
+    <h1>Menu links</h1>
+    <ul>
+    	<li>
+    		<a th:href="@{/en/international}"><span th:text="#{lang.en}">English</span></a>
+    	</li>
+    	<li>
+    		<a th:href="@{/es/roles}"><span>Roles</span></a>
+    	</li>
+    	<li>
+    		<a th:href="@{/es/groups}"><span>Groups</span></a>
+    	</li>
+    	<li>
+    		<a th:href="@{/es/employees}"><span>Employee</span></a>
+    	</li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# General properties
+server:
+  port: 8087
+
+
+# Spring database configuration
+spring:
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://82.221.22.223:3306/clarityIR
+    username: dev
+    password: Dev1234!
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+# Clickatell configuration
+clickatell:
+  username: wedonegood
+  password: SVacUSMNUCYXee
+  api-id: 3630933

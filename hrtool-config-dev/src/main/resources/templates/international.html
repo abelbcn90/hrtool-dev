@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+	<meta name="description" content="description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+
+	<title th:text="#{title}">HR Tool</title>
+
+</head>
+<body>
+
+	<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+		<a th:href="@{/en/international}"><span th:text="#{lang.en}">English</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/fr/international}"><span th:text="#{lang.fr}">French</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/es/international}"><span th:text="#{lang.es}">Spanish</span></a>
+    </div>
+    
+	<h1 th:text="#{label.username}"></h1>
+	
+</body>
+</html>

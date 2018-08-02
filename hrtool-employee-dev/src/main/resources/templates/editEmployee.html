@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html lang="" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+	<meta name="description" content="description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+
+	<title th:text="#{employees.title}">HR Tool - Edit Groups</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	
+</head>
+<body>
+	<div style="text-align: right;padding:5px;margin:5px 0px;background:#ccc;">
+		<a th:href="@{/en/employees}"><span th:text="#{lang.en}">English</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/fr/employees}"><span th:text="#{lang.fr}">French</span></a>
+       	&nbsp;|&nbsp;
+       	<a th:href="@{/es/employees}"><span th:text="#{lang.es}">Spanish</span></a>
+    </div>
+
+	<br />
+	
+	<div style="height: 50%; width: 100%;">
+		<div style="background-color: YELLOW;">
+			<div style="position: absolute;">
+				<span th:text="#{employees.button.edit}"></span>
+			</div>
+			<div style="text-align: right; position: relative;">
+				<a th:href="@{/en/employees}" class="btn btn-outline-dark"><span th:text="#{employees.button.cancel}">Cancel</span></a>
+				<button type="button" id="add" name="add" class="btn btn-primary" th:value="${employee.employeeId}" th:text="ADD"></button>
+				<button type="button" id="update" name="update" class="btn btn-primary" th:value="${employee.employeeId}" th:text="UPDATE"></button>
+			</div>
+		</div>
+		
+		<form id="editEmployeeForm" action="#">
+			<div style="width: 25%; float: left; margin-left: 25px; text-align: center; background-color: orange;">
+				<input type="hidden" id="employeeId" name="employeeId" th:field="*{employee.employeeId}" th:value=*{employee.employeeId} />
+				<input type="hidden" id="userId" name="userId" th:field="*{employee.user.userId}" th:value=*{employee.user.userId} />
+				<div>
+					<input type="text" id="number" name="number" placeholder="Contract number" th:field="*{employee.number}" th:value="*{employee.number}" />
+				</div>
+				<div>
+					<input type="text" id="userFirstName" name="userFirstName" placeholder="Name" th:field="*{employee.user.userFirstName}" th:value="*{employee.user.userFirstName}" />
+				</div>
+				<div>
+					<input type="text" id="userLastName" name="userLastName" placeholder="Last Name" th:field="*{employee.user.userLastName}" th:value="*{employee.user.userLastName}" />
+				</div>
+				<div>
+					<input type="text" id="nin" name="nin" placeholder="Number of NIN" th:field="*{employee.nin}" th:value="*{employee.nin}" />
+				</div>
+				<div>
+					<input type="email" id="userEmail" name="userEmail" placeholder="Email address" th:field="*{employee.user.userEmail}" th:value="*{employee.user.userEmail}" />
+				</div>
+				<div>
+					<input type="text" id="userPhone" name="userPhone" placeholder="Phone number" th:field="*{employee.user.userPhone}" th:value="*{employee.user.userPhone}" />
+				</div>
+				<div>
+					<input type="text" id="address" name="address" placeholder="Address" th:field="*{employee.address}" th:value="*{employee.address}" />
+				</div>
+				<div>
+					<input type="text" id="country" name="country" placeholder="Country" th:field="*{employee.country}" th:value="*{employee.country}" />
+				</div>
+				<div>
+					<input type="text" id="city" name="city" placeholder="City" th:field="*{employee.city}" th:value="*{employee.city}" />
+				</div>
+				<div>
+					<input type="text" id="postalCode" name="postalCode" placeholder="Postal code" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+				</div>
+				<div>
+					<input type="date" id="birthday" name="birthday" placeholder="Select birthday" th:field="*{employee.birthday}" th:value="*{employee.birthday}" />
+				</div>
+				<div>
+					<input type="file" id="passportScan" name="passportScan" th:field="*{employee.passportScan}" th:value="*{employee.passportScan}" />
+				</div>
+			</div>
+			
+			<div style="width: 25%; float: left; text-align: center; background-color: lightblue;">
+				<div>
+					<input type="text" id="permit" name="permit" placeholder="Work permit" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<input type="text" id="contract" name="contract" placeholder="Contract type" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+				</div>
+				<div>
+					<input type="text" id="jobPosition" name="jobPosition" placeholder="Job position" th:field="*{employee.jobPosition}" th:value="*{employee.jobPosition}" />
+					<input type="text" id="biling" name="biling" placeholder="Biling type" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+				</div>
+				<div>
+					<input type="date" id="hireDate" name="hireDate" placeholder="Select hire date" th:field="*{employee.hireDate}" th:value="*{employee.hireDate}" />
+					<input type="number" id="salary" name="salary" placeholder="Salary rate" th:field="*{employee.salary}" th:value="*{employee.salary}" />
+				</div>
+				<div>
+					<select id="group" name="group" th:field="*{employee.group}" th:remove="all-but-first">
+		                <option th:each="g : ${groupList}" th:value="${g.id}" th:text="${g.name}">Group</option>
+		            </select>
+					<input type="text" id="postalCode" name="postalCode" placeholder="Rosclar" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+				</div>
+				<div>
+					<input type="number" id="vacationAllowance" name="vacationAllowance" placeholder="Number of days per year" th:field="*{employee.vacationAllowance}" th:value="*{employee.vacationAllowance}" />
+				</div>
+			</div>
+			
+			<div style="width: 25%; float: left; text-align: center; background-color: lightgreen;">
+				<div>
+					<input type="text" id="postalCode" name="postalCode" placeholder="Email login" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<input type="text" id="postalCode" name="postalCode" placeholder="Select role" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+				</div>
+				<div>
+					<input type="password" id="password" name="password" placeholder="Password" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<span>Roles list</span>
+				</div>
+				<div>
+					<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<span>Groups list</span>
+				</div>
+				<div>
+					<input type="text" id="postalCode" name="postalCode" placeholder="Language preference" th:field="*{employee.postalCode}" th:value="*{employee.postalCode}" />
+					<span>Groups list</span>
+				</div>
+			</div>
+			
+			<hr />
+			
+		</form>
+		
+	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			console.log('Hello from editEmployee.html');
+		});
+	
+		$( "#add" ).on( "click", function( event ) {
+			alert('Add Employee');
+
+			var formDataJson = '{'
+					+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
+			      	+ ', "user" : '
+				      	+ '{'
+				      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
+					      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
+				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+				      	+ '} '
+			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
+		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+				    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+				    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
+				    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
+				    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
+				    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
+				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
+				    + ', "group" : "'+ $('#editEmployeeForm').find('#group').val() + '"'
+		      	+ '}';
+
+			    console.log(formDataJson);
+
+			jQuery.ajax({
+				method: 'PUT',
+				headers: {
+					'X-Auth-Client': '1'
+				},
+				data: formDataJson,
+				dataType: 'json',
+				contentType: 'application/json',
+				url: "/api/v1/employee/",
+				error : function(err) {
+					console.log('Error!');
+					console.log(err);
+				},
+				success: function(data) {
+					alert("success: " + data);
+				}
+			});
+		});
+
+		$( "#update" ).on( "click", function( event ) {
+			alert('Update Employee');
+
+			var formDataJson = '{'
+					+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
+			      	+ ', "user" : '
+				      	+ '{'
+				      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
+					      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
+				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+				      	+ '} '
+			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
+		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+				    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+				    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
+				    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
+				    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
+				    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
+				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
+				    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
+				    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
+				    
+// 				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permit').val() + '"'
+// 				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contract').val() + '"'
+				    + ', "jobPosition" : "'+ $('#editEmployeeForm').find('#jobPosition').val() + '"'
+// 				    + ', "bilingId" : "'+ $('#editEmployeeForm').find('#biling').val() + '"'
+				    + ', "hireDate" : "'+ $('#editEmployeeForm').find('#hireDate').val() + '"'
+				    + ', "group" : "'+ $('#editEmployeeForm').find('#group').val() + '"'
+// 				    client
+				    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
+
+// 				    + ', "emailLogin" : "'+ $('#editEmployeeForm').find('#emailLogin').val() + '"'
+		      	+ '}';
+
+			    console.log(formDataJson);
+
+			jQuery.ajax({
+				method: 'PATCH',
+				headers: {
+					'X-Auth-Client': '1'
+				},
+				data: formDataJson,
+				dataType: 'json',
+				contentType: 'application/json',
+				url: "/api/v1/employee/",
+				error : function(err) {
+					console.log('Error!');
+					console.log(err);
+				},
+				success: function(data) {
+					alert("success: " + data);
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

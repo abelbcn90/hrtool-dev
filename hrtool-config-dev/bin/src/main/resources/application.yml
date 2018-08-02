@@ -1,0 +1,47 @@
+# General properties
+server:
+  port: 8087
+
+
+# Spring properties
+logging.level.org.springframework.web: DEBUG
+
+
+# Thymeleaf properties
+spring.thymeleaf.cache: false
+
+
+# Spring mail server configuration
+spring.mail:
+  host: smtp.office365.com
+  port: 587
+  protocol: smtp
+  username: say_hello@wedonegood.es
+  password: WDG2016!
+  defaultEncoding: UTF-8
+  properties.mail.smtp.auth: true
+  properties.mail.smtp.starttls.enable: true
+  properties.mail.smtp.starttls.required: true
+
+
+# Spring database configuration
+spring:
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  datasource:
+    url: jdbc:mysql://82.221.22.223:3306/hrtool
+    username: dev
+    password: Dev1234!
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+# Security properties
+#spring:
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+

@@ -1,0 +1,33 @@
+# General properties
+server:
+  port: 8087
+
+
+# Spring database configuration
+spring:
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:mysql://82.221.22.223:3306/hrtool
+    username: dev
+    password: Dev1234!
+    driver-class-name: com.mysql.jdbc.Driver
+  show-sql: true
+  format_sql: true
+
+# Hibernate logs
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type: trace
+
+
+# Clickatell configuration
+clickatell:
+  username: wedonegood
+  password: SVacUSMNUCYXee
+  api-id: 3630933

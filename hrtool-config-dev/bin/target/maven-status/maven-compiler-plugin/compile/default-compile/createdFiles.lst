@@ -1,0 +1,5 @@
+com\wedonegood\hrtool\test\UrlLocaleInterceptor.class
+com\wedonegood\hrtool\config\LocaleConfig.class
+com\wedonegood\hrtool\controller\InternationalController.class
+com\wedonegood\hrtool\test\UrlLocaleResolver.class
+com\wedonegood\hrtool\HrtoolApplication.class

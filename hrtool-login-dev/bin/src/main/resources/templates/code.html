@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Check code page</title>
+</head>
+<body>
+    <h1>Hello <th:block th:utext="${uic.userFirstName} + ' ' + ${uic.userLastName}"/>!</h1>
+    <h2 th:if="${message}" th:text="${message}" class="error"></h2>
+    <h3>Enter code from sms</h3>
+    <form th:action="@{/login/code/check}" method="post">
+        <label for="code">Code</label>:
+        <input type="text" id="code" name="code" autofocus="autofocus" /> <br /><br />
+        <input type="submit" value="Check code" />
+    </form>
+    </body>
+</html>

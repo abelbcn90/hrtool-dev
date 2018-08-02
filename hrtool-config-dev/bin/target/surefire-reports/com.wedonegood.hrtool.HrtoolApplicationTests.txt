@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.wedonegood.hrtool.HrtoolApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.797 s - in com.wedonegood.hrtool.HrtoolApplicationTests
