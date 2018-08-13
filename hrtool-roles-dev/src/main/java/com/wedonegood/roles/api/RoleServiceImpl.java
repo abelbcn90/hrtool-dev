@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.wedonegood.common.client.Client;
 import com.wedonegood.roles.api.model.entity.Role;
 import com.wedonegood.roles.api.model.repository.RoleRepository;
 
@@ -30,8 +29,8 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Page<Role> getRoles(Client client, Pageable pageable) {
-        return this.roleRepository.findAllByClientAndActiveIsTrue(client, pageable);
+    public Page<Role> getRoles(Long client, Pageable pageable) {
+        return this.roleRepository.findAllByClientIdAndActiveIsTrue(client, pageable);
     }
     
     @Override
@@ -48,13 +47,18 @@ public class RoleServiceImpl implements RoleService {
     }
     
     @Override
+    public Role findById(final Long roleId) {
+    	return this.roleRepository.findById(roleId).get();
+    }
+    
+    @Override
     public List<Role> list() {
         return this.roleRepository.findAll();
     }
     
     @Override
-    public List<Role> findAllByClientAndActiveIsTrue(final Client client) {
-    	return this.roleRepository.findAllByClientAndActiveIsTrue(client);
+    public List<Role> findAllByClientIdAndActiveIsTrue(final Long clientId) {
+    	return this.roleRepository.findAllByClientIdAndActiveIsTrue(clientId);
     }
     
 //    @Override
@@ -82,5 +86,9 @@ public class RoleServiceImpl implements RoleService {
 	public void delete(final Long roleId) {
 		this.roleRepository.deleteById(roleId);
 	}
-
+	
+	@Override
+	public List<Role> findRolesFromUserRoleByUserIdAndActiveIsTrue(final Long userId) {
+		return this.roleRepository.findRolesFromUserRoleByUserIdAndActiveIsTrue(userId);
+	}
 }

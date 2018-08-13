@@ -2,10 +2,14 @@ package com.wedonegood.employee.rest.v1.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
+import com.wedonegood.userRole.RoleGroups;
+import com.wedonegood.userRole.rest.v1.dto.RoleGroupsDto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -76,6 +80,9 @@ public class EmployeeDto {
     @ApiModelProperty(value = "Employee manager", position = 21)
     private Long managerId;
     
+    @ApiModelProperty(value = "Employee roleGroups", position = 22)
+    private List<RoleGroupsDto> roleGroups;
+    
     @ApiModelProperty(readOnly = true, value = "Active flag", position = 100)
     private boolean active;
     
@@ -121,6 +128,14 @@ public class EmployeeDto {
     	this.vacationTaken = employee.getVacationTaken();
     	this.sicknessTaken = employee.getSicknessTaken();
 //    	this.managerId = employee.getManager().getUserId();
+    	
+    	this.roleGroups = new ArrayList<RoleGroupsDto>();
+    	
+    	if (null != employee.getRoleGroups()) {
+	    	for (final RoleGroups rg : employee.getRoleGroups()) {
+	    		this.roleGroups.add(new RoleGroupsDto(rg.getRole(), rg.getGroups()));
+	    	}
+    	}
     	
         this.active = employee.isActive();
         this.createdDate = employee.getCreatedDate();
@@ -425,6 +440,20 @@ public class EmployeeDto {
 	 */
 	public void setManagerId(Long managerId) {
 		this.managerId = managerId;
+	}
+
+	/**
+	 * @return the roleGroups
+	 */
+	public List<RoleGroupsDto> getRoleGroups() {
+		return roleGroups;
+	}
+
+	/**
+	 * @param roleGroups the roleGroups to set
+	 */
+	public void setRoleGroups(List<RoleGroupsDto> roleGroups) {
+		this.roleGroups = roleGroups;
 	}
 
 	/**

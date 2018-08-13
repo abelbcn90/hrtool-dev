@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wedonegood.common.client.ClientService;
+import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.roles.api.FunctionService;
 import com.wedonegood.roles.api.RoleService;
 import com.wedonegood.roles.api.model.entity.Function;
@@ -51,6 +53,9 @@ public class RoleController extends PagingController {
 	@Autowired
 	private FunctionService functionService;
 	
+	@Autowired
+    private ClientService clientService;
+	
 	@GetMapping("/list/{page}")
     @ApiOperation(value = "Get roles", nickname = "getRoles")
     @ApiResponses(value = {
@@ -58,7 +63,7 @@ public class RoleController extends PagingController {
     })
     public ResponseEntity<List<RoleDto>> getRoles(@PathVariable("page") final Optional<Integer> page) {
         final Pageable pageable = PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, "id");
-        final Page<Role> g = this.roleService.getRoles(pageable);
+        final Page<Role> g = this.roleService.getRoles(UserInfoContext.getCurrent().getClientId(), pageable);
         final ResponseEntity<List<RoleDto>> resp = this.pageResponse(g, RoleDto::new);
         
         return resp;
@@ -75,7 +80,7 @@ public class RoleController extends PagingController {
 			functions.add(this.functionService.get(fdto.getFunctionId()));
 		}
 		
-        final Role role = this.roleService.save(new Role(roleDto.getName(), functions));
+        final Role role = this.roleService.save(new Role(roleDto.getName(), functions, this.clientService.get(UserInfoContext.getCurrent().getClientId())));
         
         return ResponseEntity.ok(new RoleDto(role));
     }

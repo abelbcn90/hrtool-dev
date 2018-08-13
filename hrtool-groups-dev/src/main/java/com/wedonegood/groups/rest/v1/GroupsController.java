@@ -20,14 +20,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wedonegood.calendar.api.model.entity.Calendar;
+import com.wedonegood.common.client.ClientService;
+import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.groups.api.GroupService;
 import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.groups.calendar.api.CalendarService;
-import com.wedonegood.groups.calendar.api.model.entity.Calendar;
 import com.wedonegood.groups.rest.common.PagingController;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
 import com.wedonegood.groups.working.hours.api.WorkingHoursService;
-import com.wedonegood.groups.working.hours.api.model.entity.WorkingHours;
+import com.wedonegood.working.hours.api.model.entity.WorkingHours;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,8 +56,8 @@ public class GroupsController extends PagingController {
 	@Autowired
 	private CalendarService calendarService;
 	
-//	@Autowired
-//	private EmployeeService employeeService;
+	@Autowired
+    private ClientService clientService;
 	
 	@GetMapping("/list/{page}")
     @ApiOperation(value = "Get groups", nickname = "getGroups")
@@ -64,10 +66,9 @@ public class GroupsController extends PagingController {
     })
     public ResponseEntity<List<GroupDto>> getGroups(@PathVariable("page") final Optional<Integer> page) {
         final Pageable pageable = PageRequest.of(page.orElse(0), 10, Sort.Direction.ASC, "id");
-        final Page<Groups> g = this.groupService.getGroups(pageable);
+        final Page<Groups> g = this.groupService.getGroups(UserInfoContext.getCurrent().getClientId(), pageable);
         
         for (final Groups groups : g) {
-//        	groups.setEmployeesNumber(this.employeeService.findNumberOfEmployeesByGroup(groups.getId()));
         	groups.setEmployeesNumber(this.groupService.findNumberOfEmployeesByGroup(groups.getId()));
         }
         
@@ -90,6 +91,7 @@ public class GroupsController extends PagingController {
         group.setName(groupDto.getName());
         group.setWorkingHours(workingHours);
         group.setCalendar(calendar);
+        group.setClient(this.clientService.get(UserInfoContext.getCurrent().getClientId()));
         
         group = this.groupService.save(group);
         

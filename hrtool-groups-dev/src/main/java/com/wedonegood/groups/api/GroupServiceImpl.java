@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.wedonegood.common.client.Client;
 import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.groups.api.model.repository.GroupRepository;
 
@@ -28,8 +27,8 @@ public class GroupServiceImpl implements GroupService {
         return this.groupRepository.findAllByActiveIsTrue(pageable);
     }
 
-    public Page<Groups> getGroups(final Client client, final Pageable pageable) {
-        return this.groupRepository.findAllByClientAndActiveIsTrue(client, pageable);
+    public Page<Groups> getGroups(final Long client, final Pageable pageable) {
+        return this.groupRepository.findAllByClientIdAndActiveIsTrue(client, pageable);
     }
     
     
@@ -52,8 +51,8 @@ public class GroupServiceImpl implements GroupService {
     }
     
     @Override
-    public List<Groups> listAllByClient(final Client client) {
-    	return this.groupRepository.findAllByClientAndActiveIsTrue(client);
+    public List<Groups> listAllByClientId(final Long clientId) {
+    	return this.groupRepository.findAllByClientIdAndActiveIsTrue(clientId);
     }
     
     @Override
@@ -77,5 +76,10 @@ public class GroupServiceImpl implements GroupService {
     	final Integer result = this.groupRepository.findNumberOfEmployeesByGroup(groupId);
     	
     	return null != result ? result : 0;
+    }
+    
+    @Override
+    public List<Groups> findGroupsFromUserRoleByUserIdAndRoleIdAndActiveIsTrue(final Long userId, final Long roleId) {
+    	return this.groupRepository.findGroupsFromUserRoleByUserIdAndRoleIdAndActiveIsTrue(userId, roleId);
     }
 }

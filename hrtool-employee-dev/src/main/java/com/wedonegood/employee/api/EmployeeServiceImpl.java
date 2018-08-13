@@ -25,6 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<Employee> getEmployees(Long client, Pageable pageable) {
         return this.employeeRepository.findAllByClientAndActiveIsTrue(client, pageable);
     }
+    
+    @Override
+    public Page<Employee> searchEmployees(final Long client, final String keyword, final Pageable pageable) {
+    	return this.employeeRepository.searchEmployees(client, keyword, pageable);
+    }
 
     public List<Employee> getActiveEmployee() {
         return employeeRepository.findEmployeeByActiveIsTrue();
@@ -49,6 +54,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public Employee get(final long employeeId) {
-        return this.employeeRepository.getOne(employeeId);
+    	final Employee employee = this.employeeRepository.getOne(employeeId);
+    	
+//    	employee.
+    	
+    	return employee;
     }
 }

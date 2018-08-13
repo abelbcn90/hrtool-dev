@@ -149,6 +149,17 @@
 		            <div>
 		            	<span>Roles selected</span>
 		            </div>
+		            
+					<div>
+						<th:block th:each="roleGroups : ${employee.roleGroups}">
+							<span th:text="*{'Role: ' + roleGroups.role.name}"></span>
+							<th:block th:each="group : ${roleGroups.groups}">
+								<span th:text="*{'Groups: ' + group.name}"></span>
+							</th:block>
+							<br>
+						</th:block>
+		            </div>
+		            
 				</div>
 				
 				<div style="width: 33%; float: left; text-align: center; background-color: pink;">
@@ -186,43 +197,62 @@
 		$( "#add" ).on( "click", function( event ) {
 			alert('Add Employee');
 
-			var formDataJson = '{'
-					+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
-			      	+ ', "user" : '
-				      	+ '{'
-				      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
-					      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
-				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
-					      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
-					      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
-				      	+ '} '
-			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
-		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-				    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-				    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
-				    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
-				    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
-				    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
-				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
-				    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
-				    // Job details
-				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
-				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
-				    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
-				    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
-				    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
-				    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
-				    + ', "group" : '
-			    		+ '{'
-			    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
-			    		+ '} '
-				    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
-				    // User Role
-		      	+ '}';
+			var formDataJson = ' { '
+				+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
+		      	+ ', "user" : '
+			      	+ ' { '
+			      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
+				      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
+			      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+				      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+				      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+				      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
+				      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
+			      	+ ' } '
+		      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
+	    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+			    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+			    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
+			    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
+			    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
+			    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
+			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
+			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
+			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
+			    // Job details
+			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
+			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
+			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
+			    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
+			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
+			    + ', "group" : '
+		    		+ ' { '
+		    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
+		    		+ ' } '
+			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
+			    // User Role
+			    + ', "roleGroups" : '
+			    + ' [ '
+		    		+ ' { '
+		    			+ '"role" : '
+		    				+ ' { '
+		    					+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
+		    				+ ' } '
+	    				+ ', "groups" : '
+	    					+ ' [ '
+	    						+ ' { '
+			    					+ '"groupId" : "1"'
+			    				+ ' } '
+			    				+ ', { '
+			    					+ '"groupId" : "2"'
+		    					+ ' } '
+		    				+ ' ] '
+		    		+ ' } '
+				+ ' ] '
+	      	+ ' } ';
 
-			    console.log(formDataJson);
+		    console.log(formDataJson);
 
 			jQuery.ajax({
 				method: 'PUT',
@@ -246,44 +276,77 @@
 		$( "#update" ).on( "click", function( event ) {
 			alert('Update Employee');
 
-			var formDataJson = '{'
-					+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
-			      	+ ', "user" : '
-				      	+ '{'
-				      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
-					      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
-				      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-					      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-					      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
-					      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
-					      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
-				      	+ '} '
-			      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
-		    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-				    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-				    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
-				    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
-				    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
-				    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
-				    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
-				    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
-				    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
-				    // Job details
-				    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
-				    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
-				    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
-				    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
-				    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
-				    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
-				    + ', "group" : '
-			    		+ '{'
-			    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
-			    		+ '} '
-				    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
-				    // User Role
-		      	+ '}';
-
-			    console.log(formDataJson);
+			var formDataJson = ' { '
+				+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
+		      	+ ', "user" : '
+			      	+ ' { '
+			      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
+				      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
+			      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+				      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+				      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+				      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
+				      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
+			      	+ ' } '
+		      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
+	    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+			    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+			    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
+			    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
+			    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
+			    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
+			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
+			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
+			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
+			    // Job details
+			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
+			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
+			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
+			    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
+			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
+			    + ', "group" : '
+		    		+ ' { '
+		    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
+		    		+ ' } '
+			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
+			    // User Role
+			    + ', "roleGroups" : '
+			    + ' [ '
+		    		+ ' { '
+		    			+ '"role" : '
+		    				+ ' { '
+		    					+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
+		    				+ ' } '
+	    				+ ', "groups" : '
+	    					+ ' [ '
+	    						+ ' { '
+			    					+ '"groupId" : "1"'
+			    				+ ' } '
+			    				+ ', { '
+			    					+ '"groupId" : "2"'
+		    					+ ' } '
+		    				+ ' ] '
+		    		+ ' } '
+		    		+ ', { '
+		    			+ '"role" : '
+		    				+ ' { '
+		    					+ '"roleId" : "9"'
+		    				+ ' } '
+	    				+ ', "groups" : '
+	    					+ ' [ '
+	    						+ ' { '
+			    					+ '"groupId" : "1"'
+			    				+ ' } '
+			    				+ ', { '
+			    					+ '"groupId" : "2"'
+		    					+ ' } '
+		    				+ ' ] '
+		    		+ ' } '
+   				+ ' ] '
+	      	+ ' } ';
+		      	
+		    console.log(formDataJson);
 
 			jQuery.ajax({
 				method: 'PATCH',

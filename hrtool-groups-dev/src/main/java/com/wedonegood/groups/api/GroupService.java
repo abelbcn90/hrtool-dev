@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.wedonegood.common.client.Client;
 import com.wedonegood.groups.api.model.entity.Groups;
 
 /**
@@ -14,12 +13,14 @@ import com.wedonegood.groups.api.model.entity.Groups;
  */
 public interface GroupService {
 	Page<Groups> getGroups(final Pageable pageable);
-	Page<Groups> getGroups(final Client client, final Pageable pageable);
+	Page<Groups> getGroups(final Long client, final Pageable pageable);
     Groups save(final Groups group);
     Groups get(final long groupId);
     List<Groups> list();
-    List<Groups> listAllByClient(final Client client);
+    List<Groups> listAllByClientId(final Long clientId);
     boolean delete(final Long groupId);
     
     Integer findNumberOfEmployeesByGroup(final long groupId);
+    
+    List<Groups> findGroupsFromUserRoleByUserIdAndRoleIdAndActiveIsTrue(final Long userId, final Long roleId);
 }

@@ -1,12 +1,14 @@
 package com.wedonegood.employee.api.model.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.wedonegood.biling.Biling;
 import com.wedonegood.common.user.api.model.entity.User;
@@ -14,6 +16,7 @@ import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;
 import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.permit.Permit;
+import com.wedonegood.userRole.RoleGroups;
 
 @Entity
 public class Employee extends BaseEntity {
@@ -83,6 +86,9 @@ public class Employee extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id")
     private User manager;
+    
+    @Transient
+    private List<RoleGroups> roleGroups;
 
 	/**
 	 * @return the user
@@ -362,5 +368,19 @@ public class Employee extends BaseEntity {
 	 */
 	public void setManager(User manager) {
 		this.manager = manager;
+	}
+
+	/**
+	 * @return the roleGroups
+	 */
+	public List<RoleGroups> getRoleGroups() {
+		return roleGroups;
+	}
+
+	/**
+	 * @param roleGroups the roleGroups to set
+	 */
+	public void setRoleGroups(List<RoleGroups> roleGroups) {
+		this.roleGroups = roleGroups;
 	}
 }

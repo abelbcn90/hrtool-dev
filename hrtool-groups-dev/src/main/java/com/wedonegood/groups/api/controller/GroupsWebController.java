@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.groups.api.GroupService;
 import com.wedonegood.groups.calendar.api.CalendarService;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
@@ -32,8 +33,7 @@ public class GroupsWebController {
 	
 	@GetMapping("")
     public String index(final Model model) {
-		
-		model.addAttribute("groupList", this.groupService.getGroups(PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
+		model.addAttribute("groupList", this.groupService.getGroups(UserInfoContext.getCurrent().getClientId(), PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
 		
         return VIEW_NAME;
     }

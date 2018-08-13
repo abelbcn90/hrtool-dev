@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.roles.api.FunctionService;
 import com.wedonegood.roles.api.RoleService;
 import com.wedonegood.roles.api.model.entity.Function;
@@ -33,9 +34,7 @@ public class RolesWebController {
 	
 	@GetMapping("")
     public String index(final Model model) {
-		
-//		model.addAttribute("functionList", this.functionService.list());
-		model.addAttribute("roleList", this.roleService.getRoles(PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
+		model.addAttribute("roleList", this.roleService.getRoles(UserInfoContext.getCurrent().getClientId(), PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
 		
         return VIEW_NAME;
     }
@@ -49,10 +48,7 @@ public class RolesWebController {
 			fdtoList.add(new FunctionDto(f));
 		}
 		
-		
-//		model.addAttribute("functionList", this.functionService.list());
 		model.addAttribute("functionList", fdtoList);
-//		model.addAttribute("roleList", this.roleService.list());
 		model.addAttribute("role", new RoleDto());
 		
 		System.out.println("New Role");
@@ -62,22 +58,17 @@ public class RolesWebController {
 	
 	@GetMapping("/edit/{roleId}")
     public String editRole(@PathVariable("roleId") final Long roleId, final Model model) {
-		
-//		model.addAttribute("functionList", this.functionService.list());
 		final List<FunctionDto> fdtoList = new ArrayList<FunctionDto>();
 		final List<Function> fList = this.functionService.getFunctions();
 		
 		for (final Function f : fList) {
 			fdtoList.add(new FunctionDto(f));
 		}
-//		model.addAttribute("functionList", this.functionService.list());
+		
 		model.addAttribute("functionList", fdtoList);
-//		model.addAttribute("roleList", this.roleService.list());
 		model.addAttribute("role", new RoleDto(this.roleService.get(roleId)));
 		System.out.println(new RoleDto(this.roleService.get(roleId)).getFunctions());
 		System.out.println(fdtoList);
-		
-		// CAMBIAR EQUALS Y HASHCODE DE LAS ENTIDADES YA QUE AL GENERAR LOS DTO, SE CREAN NUEVOS OBJETOS CONSTANTEMENTE Y CAMBIAN EL HASHCODE CADA VEZ
 		
 		System.out.println("Edit Role");
 		
