@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
@@ -83,6 +85,9 @@ public class EmployeeDto {
     @ApiModelProperty(value = "Employee roleGroups", position = 22)
     private List<RoleGroupsDto> roleGroups;
     
+    @ApiModelProperty(value = "Employee profilePicture", position = 23)
+    private String profilePicture;
+    
     @ApiModelProperty(readOnly = true, value = "Active flag", position = 100)
     private boolean active;
     
@@ -127,7 +132,8 @@ public class EmployeeDto {
     	this.vacationAllowance = employee.getVacationAllowance();
     	this.vacationTaken = employee.getVacationTaken();
     	this.sicknessTaken = employee.getSicknessTaken();
-//    	this.managerId = employee.getManager().getUserId();
+    	this.managerId = employee.getManager().getUserId();
+    	this.profilePicture = employee.getProfilePicture();
     	
     	this.roleGroups = new ArrayList<RoleGroupsDto>();
     	
@@ -440,6 +446,20 @@ public class EmployeeDto {
 	 */
 	public void setManagerId(Long managerId) {
 		this.managerId = managerId;
+	}
+
+	/**
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	/**
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 	/**

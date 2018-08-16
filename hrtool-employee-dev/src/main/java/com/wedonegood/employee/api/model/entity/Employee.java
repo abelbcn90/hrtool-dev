@@ -87,6 +87,9 @@ public class Employee extends BaseEntity {
     @JoinColumn(name = "manager_id")
     private User manager;
     
+    @Column(nullable = true)
+    private String profilePicture;
+    
     @Transient
     private List<RoleGroups> roleGroups;
 
@@ -368,6 +371,20 @@ public class Employee extends BaseEntity {
 	 */
 	public void setManager(User manager) {
 		this.manager = manager;
+	}
+
+	/**
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	/**
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 
 	/**

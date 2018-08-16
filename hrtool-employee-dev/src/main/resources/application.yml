@@ -1,3 +1,14 @@
 # General properties
 server:
   port: 8087
+
+
+uploads:
+  folder: uploads/
+
+file:
+  name:
+    profile:
+      picture: profilePicture
+    passport:
+      scan: passportScan

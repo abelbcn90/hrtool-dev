@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.wedonegood.biling.BilingService;
 import com.wedonegood.common.client.ClientService;
@@ -116,11 +119,13 @@ public class EmployeeController extends PagingController {
 	}
 	
 	@PutMapping("/")
+//	@PutMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @ApiOperation(value = "Add new employee", nickname = "addEmployee")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "new employee", response = EmployeeDto.class)
     })
-    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto) {
+//    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto, @RequestPart(required = false) MultipartFile file) {
+	public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = new Employee();
 		User user = new User();
 		
@@ -182,11 +187,13 @@ public class EmployeeController extends PagingController {
     }
 	
 	@PatchMapping("/")
+//	@PatchMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @ApiOperation(value = "Update employee", nickname = "updateEmployee")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Employee Updated", response = EmployeeDto.class)
     })
-    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto) {
+//    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto, @RequestPart(required = false) MultipartFile file) {
+	public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = this.employeeService.get(employeeDto.getEmployeeId());
         
         if (null == employee) {
