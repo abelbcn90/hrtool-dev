@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.wedonegood.biling.Biling;
+import com.wedonegood.biling.Billing;
 import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;
@@ -61,8 +61,8 @@ public class Employee extends BaseEntity {
     private String jobPosition;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "biling_id")
-    private Biling biling;
+    @JoinColumn(name = "billing_id")
+    private Billing billing;
     
     @Column(nullable = true)
     private LocalDate hireDate;
@@ -262,17 +262,17 @@ public class Employee extends BaseEntity {
 	}
 
 	/**
-	 * @return the biling
+	 * @return the billing
 	 */
-	public Biling getBiling() {
-		return biling;
+	public Billing getBilling() {
+		return billing;
 	}
 
 	/**
-	 * @param biling the biling to set
+	 * @param billing the billing to set
 	 */
-	public void setBiling(Biling biling) {
-		this.biling = biling;
+	public void setBilling(Billing billing) {
+		this.billing = billing;
 	}
 
 	/**

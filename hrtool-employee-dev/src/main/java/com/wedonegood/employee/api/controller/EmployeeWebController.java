@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wedonegood.biling.BilingService;
+import com.wedonegood.biling.BillingService;
 import com.wedonegood.common.language.LanguageService;
 import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.contract.ContractService;
@@ -46,7 +46,7 @@ public class EmployeeWebController {
 	private ContractService contractService;
 	
 	@Autowired
-	private BilingService bilingService;
+	private BillingService bilingService;
 	
 	@Autowired
 	private LanguageService languageService;

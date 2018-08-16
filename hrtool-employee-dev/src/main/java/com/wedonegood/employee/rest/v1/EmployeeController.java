@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,11 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.wedonegood.biling.BilingService;
+import com.wedonegood.biling.BillingService;
 import com.wedonegood.common.client.ClientService;
 import com.wedonegood.common.language.LanguageService;
 import com.wedonegood.common.model.user.UserService;
@@ -75,7 +72,7 @@ public class EmployeeController extends PagingController {
 	private ContractService contractService;
 	
 	@Autowired
-	private BilingService bilingService;
+	private BillingService billingService;
 	
 	@Autowired
 	private LanguageService languageService;
@@ -162,7 +159,7 @@ public class EmployeeController extends PagingController {
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));
         employee.setContract(this.contractService.get(employeeDto.getContractId()));
         employee.setJobPosition(employeeDto.getJobPosition());
-        employee.setBiling(this.bilingService.get(employeeDto.getBilingId()));
+        employee.setBilling(this.billingService.get(employeeDto.getBillingId()));
         employee.setHireDate(employeeDto.getHireDate());
         employee.setSalary(employeeDto.getSalary());
         employee.setGroup(this.groupService.get(employeeDto.getGroup().getGroupId()));
@@ -238,7 +235,7 @@ public class EmployeeController extends PagingController {
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));
         employee.setContract(this.contractService.get(employeeDto.getContractId()));
         employee.setJobPosition(employeeDto.getJobPosition());
-        employee.setBiling(this.bilingService.get(employeeDto.getBilingId()));
+        employee.setBilling(this.billingService.get(employeeDto.getBillingId()));
         employee.setHireDate(employeeDto.getHireDate());
         employee.setSalary(employeeDto.getSalary());
         employee.setGroup(this.groupService.get(employeeDto.getGroup().getGroupId()));

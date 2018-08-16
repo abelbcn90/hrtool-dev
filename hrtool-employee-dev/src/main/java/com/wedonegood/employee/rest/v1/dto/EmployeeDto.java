@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
@@ -58,8 +56,8 @@ public class EmployeeDto {
     @ApiModelProperty(value = "Employee jobPosition", position = 13)
     private String jobPosition;
     
-    @ApiModelProperty(value = "Employee bilingId", position = 14)
-    private Long bilingId;
+    @ApiModelProperty(value = "Employee billingId", position = 14)
+    private Long billingId;
     
     @ApiModelProperty(value = "Employee hireDate", position = 15)
     private LocalDate hireDate;
@@ -125,7 +123,7 @@ public class EmployeeDto {
     	this.permitId = employee.getPermit().getId();
     	this.contractId = employee.getContract().getId();
     	this.jobPosition = employee.getJobPosition();
-    	this.bilingId = employee.getBiling().getId();
+    	this.billingId = employee.getBilling().getId();
     	this.hireDate = employee.getHireDate();
     	this.salary = employee.getSalary();
     	this.group = new GroupDto(employee.getGroup());
@@ -337,17 +335,17 @@ public class EmployeeDto {
 	}
 
 	/**
-	 * @return the bilingId
+	 * @return the billingId
 	 */
-	public Long getBilingId() {
-		return bilingId;
+	public Long getBillingId() {
+		return billingId;
 	}
 
 	/**
-	 * @param bilingId the bilingId to set
+	 * @param billingId the billingId to set
 	 */
-	public void setBilingId(Long bilingId) {
-		this.bilingId = bilingId;
+	public void setBillingId(Long billingId) {
+		this.billingId = billingId;
 	}
 
 	/**

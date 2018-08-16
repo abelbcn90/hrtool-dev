@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BilingServiceImpl implements BilingService {
+public class BillingServiceImpl implements BillingService {
 	
 	@Autowired
-    private BilingRepository bilingRepository;
+    private BillingRepository bilingRepository;
 	
 	@Override
-	public List<Biling> getBilings() {
+	public List<Billing> getBilings() {
 		return this.bilingRepository.findAll();
 	}
 	
 	@Override
-    public Biling get(final Long bilingId) {
+    public Billing get(final Long bilingId) {
         return this.bilingRepository.getOne(bilingId);
     }
 }

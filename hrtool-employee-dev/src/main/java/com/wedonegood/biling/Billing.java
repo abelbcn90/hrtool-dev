@@ -11,7 +11,7 @@ import com.wedonegood.employee.model.common.BaseEntity;
  *
  */
 @Entity
-public class Biling extends BaseEntity {
+public class Billing extends BaseEntity {
 	
     @Column(nullable = true)
     private String name;
