@@ -1,16 +1,11 @@
 package com.wedonegood.uploads;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +26,8 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping(value = "/api/v1/uploads")
 @Api(value="Uploads", description="Operations pertaining to uploads", position = 6)
 public class UploadController {
+	
+	private final static String IMAGES_SERVICE_PATH = "/api/v1/img/";
 
     @Autowired
     private UploadService uploadService;
@@ -52,7 +49,7 @@ public class UploadController {
     	employee.setProfilePicture(path);
     	this.employeeService.save(employee);
         
-        return ResponseEntity.ok(path);
+        return ResponseEntity.ok(IMAGES_SERVICE_PATH + "profilePicture/" + employee.getId() + "/full");
     }
     
     @PutMapping(path = "/passportScan/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
@@ -69,42 +66,6 @@ public class UploadController {
     	employee.setPassportScan(path);
     	this.employeeService.save(employee);
     	
-    	return ResponseEntity.ok(path);
-    }
-
-    @GetMapping(value = "/profilePicture/{employeeId}", produces = "image/jpg")
-    @ApiOperation(value = "Get profile picture", code = 200)
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "Get profile picture")
-    })
-    public ResponseEntity getProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-        final Employee employee = this.employeeService.get(employeeId);
-    	
-        final File file = new File(employee.getProfilePicture());
-        final String contentType = Files.probeContentType(file.toPath());
-        final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-        
-        return ResponseEntity.ok()
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
-    }
-    
-    @GetMapping(value = "/passportScan/{employeeId}", produces = {"image/png", "image/jpg", "application/pdf"})
-    @ApiOperation(value = "Get passport scan", code = 200)
-    @ApiResponses(value = {
-    		@ApiResponse(code = 200, message = "Get passport scan")
-    })
-    public ResponseEntity getPassportScan(@PathVariable("employeeId") final Long employeeId) throws IOException {
-    	final Employee employee = this.employeeService.get(employeeId);
-    	
-    	final File file = new File(employee.getPassportScan());
-    	final String contentType = Files.probeContentType(file.toPath());
-    	final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-    	
-    	return ResponseEntity.ok()
-    			.contentLength(file.length())
-    			.contentType(MediaType.parseMediaType(contentType))
-    			.body(resource);
+    	return ResponseEntity.ok(IMAGES_SERVICE_PATH + "passportScan/" + employee.getId() + "/full");
     }
 }

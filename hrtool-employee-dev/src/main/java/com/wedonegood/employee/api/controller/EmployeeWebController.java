@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.wedonegood.biling.BillingService;
+import com.wedonegood.billing.BillingService;
 import com.wedonegood.common.language.LanguageService;
 import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.contract.ContractService;
@@ -46,7 +46,7 @@ public class EmployeeWebController {
 	private ContractService contractService;
 	
 	@Autowired
-	private BillingService bilingService;
+	private BillingService billingService;
 	
 	@Autowired
 	private LanguageService languageService;
@@ -72,7 +72,7 @@ public class EmployeeWebController {
 		model.addAttribute("groupList", this.groupService.listAllByClientId(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("permitList", this.permitService.getPermits());
 		model.addAttribute("contractList", this.contractService.getContracts());
-		model.addAttribute("bilingList", this.bilingService.getBilings());
+		model.addAttribute("billingList", this.billingService.getBilings());
 		model.addAttribute("languageList", this.languageService.getLanguages());
 		model.addAttribute("roleList", this.roleService.findAllByClientIdAndActiveIsTrue(UserInfoContext.getCurrent().getClientId()));
 		
@@ -91,7 +91,7 @@ public class EmployeeWebController {
 		model.addAttribute("groupList", this.groupService.listAllByClientId(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("permitList", this.permitService.getPermits());
 		model.addAttribute("contractList", this.contractService.getContracts());
-		model.addAttribute("bilingList", this.bilingService.getBilings());
+		model.addAttribute("billingList", this.billingService.getBilings());
 		model.addAttribute("languageList", this.languageService.getLanguages());
 		model.addAttribute("roleList", this.roleService.findAllByClientIdAndActiveIsTrue(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("userRoleList", this.userRoleService.findAllByUserIdAndActiveIsTrue(employee.getUser().getId()));

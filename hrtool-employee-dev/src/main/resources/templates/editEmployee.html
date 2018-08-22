@@ -98,8 +98,8 @@
 				</div>
 				<div>
 					<input type="text" placeholder="Job position" th:field="*{employee.jobPosition}" />
-					<select th:field="*{employee.bilingId}" th:remove="all-but-first">
-		                <option th:each="b : ${bilingList}" th:value="${b.id}" th:text="${b.name}">Biling</option>
+					<select th:field="*{employee.billingId}" th:remove="all-but-first">
+		                <option th:each="b : ${billingList}" th:value="${b.id}" th:text="${b.name}">Billing</option>
 		            </select>
 				</div>
 				<div>
@@ -226,7 +226,7 @@
 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
 			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
 			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
-			    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+			    + ', "billingId" : "' + $('#editEmployeeForm').find('#billingId').val() + '"'
 			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
 			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
 			    + ', "group" : '
@@ -308,7 +308,7 @@
 // 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
 // 			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
 // 			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
-// 			    + ', "bilingId" : "' + $('#editEmployeeForm').find('#bilingId').val() + '"'
+// 			    + ', "billingId" : "' + $('#editEmployeeForm').find('#billingId').val() + '"'
 // 			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
 // 			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
 // 			    + ', "group" : '
@@ -399,26 +399,26 @@
 		      });
 		    }
 		    
-// 		    if ($('#editEmployeeForm').find('#filePassportScan')[0].files.length > 0) {
-// 		      var file_data = $('#editEmployeeForm').find('#filePassportScan')[0].files[0];
-// // 		      file_name = $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name;
-// 		      var form_data = new FormData();
-// 		      form_data.append('file', file_data);
+		    if ($('#editEmployeeForm').find('#filePassportScan')[0].files.length > 0) {
+		      var file_data = $('#editEmployeeForm').find('#filePassportScan')[0].files[0];
+// 		      file_name = $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name;
+		      var form_data = new FormData();
+		      form_data.append('file', file_data);
 
-// 		      jQuery.ajax({
-// 		        type: 'PUT',
-// 		        url: '/api/v1/uploads/passportScan/' + $('#editEmployeeForm').find('#employeeId').val(),
-// 		        async: false,
-// 		        cache: false,
-// 		        contentType: false,
-// 		        processData: false,
-// 		        data: form_data,
-// 		        enctype: 'multipart/form-data',
-// 		        success: function(fileName) {
-// 		          alert(fileName);
-// 		        }
-// 		      });
-// 		    }
+		      jQuery.ajax({
+		        type: 'PUT',
+		        url: '/api/v1/uploads/passportScan/' + $('#editEmployeeForm').find('#employeeId').val(),
+		        async: false,
+		        cache: false,
+		        contentType: false,
+		        processData: false,
+		        data: form_data,
+		        enctype: 'multipart/form-data',
+		        success: function(fileName) {
+		          alert(fileName);
+		        }
+		      });
+		    }
 		});
 
 	</script>

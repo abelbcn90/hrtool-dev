@@ -47,4 +47,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     		"  WHERE e.group_id = ? ",
 			nativeQuery = true)
     Integer findNumberOfEmployeesByGroup(final long groupId);
+    
+    List<Employee> findAllByGroupIdAndActiveIsTrue(final Long groupId);
 }

@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import com.wedonegood.biling.Billing;
+import com.wedonegood.billing.Billing;
 import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;

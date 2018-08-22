@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wedonegood.biling.BillingService;
+import com.wedonegood.billing.BillingService;
 import com.wedonegood.common.client.ClientService;
 import com.wedonegood.common.language.LanguageService;
 import com.wedonegood.common.model.user.UserService;
@@ -116,12 +116,10 @@ public class EmployeeController extends PagingController {
 	}
 	
 	@PutMapping("/")
-//	@PutMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @ApiOperation(value = "Add new employee", nickname = "addEmployee")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "new employee", response = EmployeeDto.class)
     })
-//    public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto, @RequestPart(required = false) MultipartFile file) {
 	public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = new Employee();
 		User user = new User();
@@ -184,12 +182,10 @@ public class EmployeeController extends PagingController {
     }
 	
 	@PatchMapping("/")
-//	@PatchMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @ApiOperation(value = "Update employee", nickname = "updateEmployee")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Employee Updated", response = EmployeeDto.class)
     })
-//    public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto, @RequestPart(required = false) MultipartFile file) {
 	public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = this.employeeService.get(employeeDto.getEmployeeId());
         

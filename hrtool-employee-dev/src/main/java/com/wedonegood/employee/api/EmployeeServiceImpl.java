@@ -56,8 +56,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee get(final long employeeId) {
     	final Employee employee = this.employeeRepository.getOne(employeeId);
     	
-//    	employee.
-    	
     	return employee;
+    }
+    
+    @Override
+    public List<Employee> findAllByGroupIdAndActiveIsTrue(final Long groupId) {
+    	return this.employeeRepository.findAllByGroupIdAndActiveIsTrue(groupId);
     }
 }

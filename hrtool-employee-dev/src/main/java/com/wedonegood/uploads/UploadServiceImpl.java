@@ -22,17 +22,17 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public String createProfilePicture(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-        final File f = this.getMediaFilePath(employeeId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + originalFileName.subSequence(originalFileName.indexOf("."), originalFileName.length()));
+        final File f = this.getMediaFilePath(employeeId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + originalFileName.substring(originalFileName.indexOf(".")));
         
-        f.getParentFile().mkdirs();
-        Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        
+	    f.getParentFile().mkdirs();
+	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    
         return f.getPath();
     }
     
     @Override
     public String createPassportScan(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-    	final File f = this.getMediaFilePath(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.subSequence(originalFileName.lastIndexOf("."), originalFileName.length()));
+    	final File f = this.getMediaFilePath(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf(".")));
     	
     	f.getParentFile().mkdirs();
     	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);

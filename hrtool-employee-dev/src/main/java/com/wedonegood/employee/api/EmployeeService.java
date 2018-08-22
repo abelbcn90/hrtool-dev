@@ -16,4 +16,5 @@ public interface EmployeeService {
     Employee save(final Employee employee);
     Integer findNumberOfEmployeesByGroup(final long groupId);
     Employee get(final long employeeId);
+    List<Employee> findAllByGroupIdAndActiveIsTrue(final Long groupId);
 }

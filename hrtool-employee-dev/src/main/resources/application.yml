@@ -12,3 +12,7 @@ file:
       picture: profilePicture
     passport:
       scan: passportScan
+  size:
+    small: 44
+    big: 138
+    passport: 99

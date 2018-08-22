@@ -32,3 +32,20 @@ clickatell:
   username: wedonegood
   password: SVacUSMNUCYXee
   api-id: 3630933
+
+
+# Application properties
+uploads:
+  folder: uploads/
+
+file:
+  name:
+    profile:
+      picture: profilePicture
+    passport:
+      scan: passportScan
+  size:
+    small: 44
+    big: 138
+    passport: 99
+    
