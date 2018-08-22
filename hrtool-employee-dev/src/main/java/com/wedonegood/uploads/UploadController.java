@@ -60,7 +60,13 @@ public class UploadController {
     		@ApiResponse(code = 401, message = "Access denied")}
     		)
     public ResponseEntity<String> createPassportScan(@PathVariable("employeeId") final Long employeeId, @RequestPart(required = true) MultipartFile file) throws IOException {
-    	final String path = this.uploadService.createPassportScan(employeeId, file.getOriginalFilename(), file.getInputStream());
+    	String path = "";
+    	
+    	if (!file.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
+    		path = this.uploadService.createPassportScan(employeeId, file.getOriginalFilename(), file.getInputStream());
+    	} else {
+    		path = this.uploadService.createPassportScanPdf(employeeId, file.getOriginalFilename(), file.getInputStream());
+    	}
     	
     	final Employee employee = this.employeeService.get(employeeId);
     	employee.setPassportScan(path);

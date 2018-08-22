@@ -39,6 +39,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        return employeeRepository.findEmployeeByUser_UserIdAndActiveIsTrue(userId);
         return employeeRepository.findEmployeeByUserIdAndActiveIsTrue(userId);
     }
+
+    public Employee getEmployeeById(long employeeId) {
+//        return employeeRepository.findEmployeeByUser_UserIdAndActiveIsTrue(userId);
+        return employeeRepository.findEmployeeByIdAndActiveIsTrue(employeeId);
+    }
     
     @Override
     public Employee save(final Employee employee) {
@@ -54,9 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public Employee get(final long employeeId) {
-    	final Employee employee = this.employeeRepository.getOne(employeeId);
-    	
-    	return employee;
+    	return this.employeeRepository.getOne(employeeId);
     }
     
     @Override

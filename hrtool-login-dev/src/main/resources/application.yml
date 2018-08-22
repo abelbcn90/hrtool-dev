@@ -44,8 +44,13 @@ file:
       picture: profilePicture
     passport:
       scan: passportScan
+    small: small
+    big: big
+    preview: preview
+    
   size:
     small: 44
     big: 138
     passport: 99
+
     

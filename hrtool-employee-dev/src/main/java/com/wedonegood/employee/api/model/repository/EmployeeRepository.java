@@ -41,6 +41,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findEmployeeByActiveIsTrue();
 //    Employee findEmployeeByUser_UserIdAndActiveIsTrue(long userId);
     Employee findEmployeeByUserIdAndActiveIsTrue(long userId);
+	Employee findEmployeeByIdAndActiveIsTrue(long employeeId);
     
     @Query(value = "SELECT COUNT(e.*) " +
     		"  FROM employee e " +
