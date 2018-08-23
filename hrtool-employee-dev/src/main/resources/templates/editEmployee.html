@@ -81,6 +81,11 @@
 				<div>
 					<input type="file" id="filePassportScan" name="filePassportScan" />
 				</div>
+				<div>
+					<button type="button" id="delete" name="delete" th:value="${employee.employeeId}" class="btn btn-danger btn-sm">
+			          <i class="far fa-trash-alt"></i>
+			        </button>
+				</div>
 			</div>
 			
 			<div style="width: 31%; float: left; text-align: center; background-color: lightblue;">
@@ -154,13 +159,23 @@
 		            </div>
 		            
 					<div>
-						<th:block th:each="roleGroups : ${employee.roleGroups}">
-							<span th:text="*{'Role: ' + roleGroups.role.name}"></span>
-							<th:block th:each="group : ${roleGroups.groups}">
-								<span th:text="*{'Groups: ' + group.name}"></span>
-							</th:block>
+<!-- 						<th:block th:each="roleGroups : ${employee.roleGroups}"> -->
+<!-- 							<span th:text="*{'Role: ' + roleGroups.role.name}"></span> -->
+<!-- 							<th:block th:each="group : ${roleGroups.groups}"> -->
+<!-- 								<span th:text="*{'Groups: ' + group.name}"></span> -->
+<!-- 							</th:block> -->
+<!-- 							<br> -->
+<!-- 						</th:block> -->
+						<th:block th:each="role : ${employee.roles}">
+							<span th:text="*{'Role: ' + role.name}"></span>
 							<br>
 						</th:block>
+		            </div>
+		            
+		            <div>
+						<select id="role2" name="role2" th:remove="all-but-first">
+			                <option th:each="r : ${roleList}" th:value="${r.id}" th:text="${r.name}">Role</option>
+			            </select>
 		            </div>
 		            
 				</div>
@@ -175,9 +190,16 @@
 			                <option th:each="g : ${groupList}" th:value="${g.id}" th:text="${g.name}">Group</option>
 			            </select>
 		            </div>
+		            
 		            <div>
-						<span>Groups selected</span>
+						<span>Manager</span>
 					</div>
+					
+					<div>
+						<select th:field="*{employee.managerId}" th:remove="all-but-first">
+			                <option th:each="m : ${managerList}" th:value="${m.id}" th:text="${m.userFirstName + ' ' + m.userLastName}">Group</option>
+			            </select>
+		            </div>
 				</div>
 			</div>
 			
@@ -221,7 +243,9 @@
 			    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
 			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
 			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
-			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#passportScan').val() + '"'
+// 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
+// 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
+			    + ', "managerId" : "' + $('#editEmployeeForm').find('#managerId').val() + '"'
 			    // Job details
 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
 			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
@@ -235,26 +259,17 @@
 		    		+ ' } '
 			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
 			    // User Role
-			    + ', "roleGroups" : '
-			    + ' [ '
-		    		+ ' { '
-		    			+ '"role" : '
-		    				+ ' { '
-		    					+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
-		    				+ ' } '
-	    				+ ', "groups" : '
-	    					+ ' [ '
-	    						+ ' { '
-			    					+ '"groupId" : "1"'
-			    				+ ' } '
-			    				+ ', { '
-			    					+ '"groupId" : "2"'
-		    					+ ' } '
-		    				+ ' ] '
-		    		+ ' } '
-				+ ' ] '
+			    + ', "roles" : '
+			    	+ ' [ '
+			    		+ ' { '
+			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
+		    			+ ' } '
+			    		+ ', { '
+			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role2').val() + '"'
+		    			+ ' } '
+	    			+ ' ] '
 	      	+ ' } ';
-
+	      	
 		    console.log(formDataJson);
 
 			jQuery.ajax({
@@ -279,7 +294,7 @@
 		$( "#update" ).on( "click", function( event ) {
 			alert('Update Employee');
 
-// 			var formDataJson = ' { '
+			var formDataJson = ' { '
 // 				+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
 // 		      	+ ', "user" : '
 // 			      	+ ' { '
@@ -300,10 +315,9 @@
 // 			    + ', "city" : "' + $('#editEmployeeForm').find('#city').val() + '"'
 // 			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
 // 			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
-// // 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#file').val() + '"'
-// 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#file')[0].files[0].name + '"'
-// // 				+ ', "file" : "' + $('#editEmployeeForm').find('#file').val() + '"'
-// // 			    + ', "file" : "' + $('#editEmployeeForm').find('#file')[0].files[0] + '"'
+// // 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
+// // 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
+// 			    + ', "managerId" : "' + $('#editEmployeeForm').find('#managerId').val() + '"'
 // 			    // Job details
 // 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
 // 			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
@@ -317,46 +331,17 @@
 // 		    		+ ' } '
 // 			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
 // 			    // User Role
-// 			    + ', "roleGroups" : '
-// 			    + ' [ '
-// 		    		+ ' { '
-// 		    			+ '"role" : '
-// 		    				+ ' { '
-// 		    					+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
-// 		    				+ ' } '
-// 	    				+ ', "groups" : '
-// 	    					+ ' [ '
-// 	    						+ ' { '
-// 			    					+ '"groupId" : "1"'
-// 			    				+ ' } '
-// 			    				+ ', { '
-// 			    					+ '"groupId" : "2"'
-// 		    					+ ' } '
-// 		    				+ ' ] '
-// 		    		+ ' } '
-// 		    		+ ', { '
-// 		    			+ '"role" : '
-// 		    				+ ' { '
-// 		    					+ '"roleId" : "9"'
-// 		    				+ ' } '
-// 	    				+ ', "groups" : '
-// 	    					+ ' [ '
-// 	    						+ ' { '
-// 			    					+ '"groupId" : "1"'
-// 			    				+ ' } '
-// 			    				+ ', { '
-// 			    					+ '"groupId" : "2"'
-// 		    					+ ' } '
-// 		    				+ ' ] '
-// 		    		+ ' } '
-//    				+ ' ] '
+// 			    + ', "roles" : '
+// 			    	+ ' [ '
+// 			    		+ ' { '
+// 			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
+// 		    			+ ' } '
+// 			    		+ ', { '
+// 			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role2').val() + '"'
+// 		    			+ ' } '
+// 	    			+ ' ] '
 // 	      	+ ' } ';
 	      	
-// // 	      	var file_data = $('#editEmployeeForm').find('#file')[0].files[0];
-// // 	        file_name = $('#editEmployeeForm').find('#file')[0].files[0].name;
-// // 	        var form_data = new FormData();
-// // 	        formDataJson.append('file', file_data);
-		      	
 // 		    console.log(formDataJson);
 
 // 			jQuery.ajax({
@@ -378,26 +363,26 @@
 // 			});
 			
 
-		    if ($('#editEmployeeForm').find('#fileProfilePicture')[0].files.length > 0) {
-		      var file_data = $('#editEmployeeForm').find('#fileProfilePicture')[0].files[0];
-// 		      file_name = $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name;
-		      var form_data = new FormData();
-		      form_data.append('file', file_data);
+// 		    if ($('#editEmployeeForm').find('#fileProfilePicture')[0].files.length > 0) {
+// 		      var file_data = $('#editEmployeeForm').find('#fileProfilePicture')[0].files[0];
+// // 		      file_name = $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name;
+// 		      var form_data = new FormData();
+// 		      form_data.append('file', file_data);
 
-		      jQuery.ajax({
-		        type: 'PUT',
-		        url: '/api/v1/uploads/profilePicture/' + $('#editEmployeeForm').find('#employeeId').val(),
-		        async: false,
-		        cache: false,
-		        contentType: false,
-		        processData: false,
-		        data: form_data,
-		        enctype: 'multipart/form-data',
-		        success: function(fileName) {
-		        	console.log(fileName);
-		        }
-		      });
-		    }
+// 		      jQuery.ajax({
+// 		        type: 'PUT',
+// 		        url: '/api/v1/uploads/profilePicture/' + $('#editEmployeeForm').find('#employeeId').val(),
+// 		        async: false,
+// 		        cache: false,
+// 		        contentType: false,
+// 		        processData: false,
+// 		        data: form_data,
+// 		        enctype: 'multipart/form-data',
+// 		        success: function(fileName) {
+// 		        	console.log(fileName);
+// 		        }
+// 		      });
+// 		    }
 		    
 		    if ($('#editEmployeeForm').find('#filePassportScan')[0].files.length > 0) {
 		      var file_data = $('#editEmployeeForm').find('#filePassportScan')[0].files[0];
@@ -420,6 +405,28 @@
 		      });
 		    }
 		});
+
+		$('.btn-danger').on('click', function(data) {
+			 // 			alert($(this).attr("value"));
+
+ 			jQuery.ajax({
+ 				method: 'DELETE',
+ 				headers: {
+ 					'X-Auth-Client': '1'
+ 				},
+ 				dataType: 'json',
+ 				contentType: 'application/json',
+ 				url: "/api/v1/uploads/passportScan/" + $(this).attr("value"),
+ 				error : function(err) {
+ 					console.log('Error!');
+ 					console.log(err);
+ 				},
+ 				success: function(data_success) {
+ 					alert("success: " + JSON.stringify(data_success));
+				}
+ 			});
+
+ 		});
 
 	</script>
 </body>

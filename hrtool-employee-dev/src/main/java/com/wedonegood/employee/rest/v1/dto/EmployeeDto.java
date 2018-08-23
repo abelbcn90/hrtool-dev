@@ -8,8 +8,8 @@ import java.util.List;
 import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
-import com.wedonegood.userRole.RoleGroups;
-import com.wedonegood.userRole.rest.v1.dto.RoleGroupsDto;
+import com.wedonegood.roles.api.model.entity.Role;
+import com.wedonegood.roles.rest.v1.dto.RoleDto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -80,11 +80,11 @@ public class EmployeeDto {
     @ApiModelProperty(value = "Employee manager", position = 21)
     private Long managerId;
     
-    @ApiModelProperty(value = "Employee roleGroups", position = 22)
-    private List<RoleGroupsDto> roleGroups;
-    
-    @ApiModelProperty(value = "Employee profilePicture", position = 23)
+    @ApiModelProperty(value = "Employee profilePicture", position = 22)
     private String profilePicture;
+    
+    @ApiModelProperty(value = "Employee roles", position = 23)
+    private List<RoleDto> roles;
     
     @ApiModelProperty(readOnly = true, value = "Active flag", position = 100)
     private boolean active;
@@ -133,12 +133,20 @@ public class EmployeeDto {
     	this.managerId = employee.getManager().getUserId();
     	this.profilePicture = employee.getProfilePicture();
     	
-    	this.roleGroups = new ArrayList<RoleGroupsDto>();
+//    	this.roleGroups = new ArrayList<RoleGroupsDto>();
+//    	
+//    	if (null != employee.getRoleGroups()) {
+//	    	for (final RoleGroups rg : employee.getRoleGroups()) {
+//	    		this.roleGroups.add(new RoleGroupsDto(rg.getRole(), rg.getGroups()));
+//	    	}
+//    	}
     	
-    	if (null != employee.getRoleGroups()) {
-	    	for (final RoleGroups rg : employee.getRoleGroups()) {
-	    		this.roleGroups.add(new RoleGroupsDto(rg.getRole(), rg.getGroups()));
-	    	}
+    	this.roles = new ArrayList<RoleDto>();
+    	
+    	if (null != employee.getRoles()) {
+    		for (final Role role : employee.getRoles()) {
+    			this.roles.add(new RoleDto(role));
+    		}
     	}
     	
         this.active = employee.isActive();
@@ -461,19 +469,19 @@ public class EmployeeDto {
 	}
 
 	/**
-	 * @return the roleGroups
+	 * @return the roles
 	 */
-	public List<RoleGroupsDto> getRoleGroups() {
-		return roleGroups;
+	public List<RoleDto> getRoles() {
+		return roles;
 	}
 
 	/**
-	 * @param roleGroups the roleGroups to set
+	 * @param roles the roles to set
 	 */
-	public void setRoleGroups(List<RoleGroupsDto> roleGroups) {
-		this.roleGroups = roleGroups;
+	public void setRoles(List<RoleDto> roles) {
+		this.roles = roles;
 	}
-
+	
 	/**
 	 * @return the active
 	 */

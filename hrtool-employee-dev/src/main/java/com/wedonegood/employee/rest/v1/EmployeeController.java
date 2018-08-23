@@ -33,15 +33,11 @@ import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.employee.rest.common.PagingController;
 import com.wedonegood.employee.rest.v1.dto.EmployeeDto;
 import com.wedonegood.groups.api.GroupService;
-import com.wedonegood.groups.api.model.entity.Groups;
-import com.wedonegood.groups.rest.v1.dto.GroupDto;
 import com.wedonegood.permit.PermitService;
 import com.wedonegood.roles.api.RoleService;
-import com.wedonegood.roles.api.model.entity.Role;
-import com.wedonegood.userRole.RoleGroups;
+import com.wedonegood.roles.rest.v1.dto.RoleDto;
 import com.wedonegood.userRole.UserRole;
 import com.wedonegood.userRole.UserRoleService;
-import com.wedonegood.userRole.rest.v1.dto.RoleGroupsDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -151,7 +147,7 @@ public class EmployeeController extends PagingController {
         employee.setCity(employeeDto.getCity());
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
-        employee.setPassportScan(employeeDto.getPassportScan());
+        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId()));
         
         // Job details
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));
@@ -164,19 +160,17 @@ public class EmployeeController extends PagingController {
         employee.setVacationAllowance(employeeDto.getVacationAllowance());
         
         // User Role
-        List<UserRole> userRoles = new ArrayList<UserRole>();
+        final List<UserRole> userRoles = new ArrayList<UserRole>();
         
-        for (final RoleGroupsDto roleGroupsDto : employeeDto.getRoleGroups()) {
-        	for (final GroupDto groupsDto : roleGroupsDto.getGroups()) {
-        		userRoles.add(new UserRole(user, this.roleService.get(roleGroupsDto.getRole().getRoleId()), this.groupService.get(groupsDto.getGroupId())));
-        	}
+        for (final RoleDto roleDto : employeeDto.getRoles()) {
+    		userRoles.add(new UserRole(user, this.roleService.get(roleDto.getRoleId())));
         }
         
-        userRoles = this.userRoleService.saveAll(userRoles);
+        this.userRoleService.saveAll(userRoles);
         
         employee = this.employeeService.save(employee);
         
-        employee.setRoleGroups(this.getRoleGroups(employee.getUser().getId()));
+        employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
         
         return ResponseEntity.ok(new EmployeeDto(employee));
     }
@@ -225,7 +219,7 @@ public class EmployeeController extends PagingController {
         employee.setCity(employeeDto.getCity());
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
-        employee.setPassportScan(employeeDto.getPassportScan());
+        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId()));
         
         // Job details
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));
@@ -238,25 +232,20 @@ public class EmployeeController extends PagingController {
         employee.setVacationAllowance(employeeDto.getVacationAllowance());
         
         // User Role
-        final List<UserRole> oldUserRolesList = this.userRoleService.findUserRolesByUserId(employee.getUser().getUserId());
-        final List<RoleGroupsDto> roleGroupsDtoList = employeeDto.getRoleGroups();
-        final List<UserRole> selectedUserRolesList = new ArrayList<UserRole>();
-        
-        for (final RoleGroupsDto roleGroupsDto : roleGroupsDtoList) {
-        	for (final GroupDto groupDto : roleGroupsDto.getGroups()) {
-        		final Role role = this.roleService.findById(roleGroupsDto.getRole().getRoleId());
-        		final Groups group = this.groupService.get(groupDto.getGroupId());
-        		selectedUserRolesList.add(new UserRole(employee.getUser(), role, group));
+        if (null != employeeDto.getRoles() && !employeeDto.getRoles().isEmpty()) {
+        	final List<UserRole> oldUserRolesList = this.userRoleService.findUserRolesByUserId(employee.getUser().getUserId());
+        	final List<UserRole> selectedUserRolesList = new ArrayList<UserRole>();
+        	
+        	for (final RoleDto roleDto : employeeDto.getRoles()) {
+        		selectedUserRolesList.add(new UserRole(employee.getUser(), this.roleService.findById(roleDto.getRoleId())));
         	}
+        	
+        	this.userRoleService.saveAll(this.userRoleToAdd(oldUserRolesList, selectedUserRolesList));
         }
-        
-        List<UserRole> userRolesToAddList = this.userRoleToAdd(oldUserRolesList, selectedUserRolesList);
-        
-        this.userRoleService.saveAll(userRolesToAddList);
         
         employee = this.employeeService.save(employee);
         
-        employee.setRoleGroups(this.getRoleGroups(employee.getUser().getId()));
+        employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
         
         return ResponseEntity.ok(new EmployeeDto(employee));
     }
@@ -304,25 +293,9 @@ public class EmployeeController extends PagingController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         
-        employee.setRoleGroups(this.getRoleGroups(employee.getUser().getId()));
+        employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
         
         return ResponseEntity.ok(new EmployeeDto(employee));
-    }
-    
-    /**
-     * 
-     * @param userId
-     * @return
-     */
-    private List<RoleGroups> getRoleGroups(final Long userId) {
-    	final List<Role> userRoles = this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(userId);
-        final List<RoleGroups> roleGroups = new ArrayList<RoleGroups>();
-        
-        for (final Role role : userRoles) {
-        	roleGroups.add(new RoleGroups(role, this.groupService.findGroupsFromUserRoleByUserIdAndRoleIdAndActiveIsTrue(userId, role.getId())));
-        }
-        
-        return roleGroups;
     }
     
     /**
@@ -334,30 +307,27 @@ public class EmployeeController extends PagingController {
     private List<UserRole> userRoleToAdd(final List<UserRole> oldUserRoles, final List<UserRole> selectedUserRoles) {
     	final List<UserRole> userRolesToSaveList = new ArrayList<UserRole>();
     	
-    	for (final UserRole userRole : oldUserRoles) {
+    	for (final UserRole oldUserRole : oldUserRoles) {
     		boolean flag = false;
     		UserRole newUserRoleTemp = new UserRole();
     		
     		for (final UserRole newUserRole : selectedUserRoles) {
     			newUserRoleTemp = newUserRole;
     			
-    			if (newUserRole.getUser().getId().equals(userRole.getUser().getId()) &&
-						newUserRole.getRole().getId().equals(userRole.getRole().getId()) &&
-						newUserRole.getGroup().getId().equals(userRole.getGroup().getId())) {
-    				
+    			if (newUserRole.getRole().getId().equals(oldUserRole.getRole().getId())) {
     				flag = true;
     				break;
     			}
     		}
     		
-    		if (flag && !userRole.isActive()) {
-				userRole.setActive(true);
-				userRolesToSaveList.add(userRole);
-				
-    		} else if (!flag && userRole.isActive()) {
-				userRole.setActive(false);
-				userRolesToSaveList.add(userRole);
-				
+    		if (flag && !oldUserRole.isActive()) {
+    			oldUserRole.setActive(true);
+    			userRolesToSaveList.add(oldUserRole);
+    			
+    		} else if (!flag && oldUserRole.isActive()) {
+    			oldUserRole.setActive(false);
+    			userRolesToSaveList.add(oldUserRole);
+    			
     		}
     		
     		if (flag) {
@@ -368,19 +338,16 @@ public class EmployeeController extends PagingController {
     	if (!userRolesToSaveList.isEmpty()) {
     		final List<UserRole> newUserRolesToAddList = new ArrayList<UserRole>();
     		
-	    	for (final UserRole newUserRole : selectedUserRoles) {
-	    		for (final UserRole userRole : userRolesToSaveList) {
-					if (!newUserRole.getUser().getId().equals(userRole.getUser().getId()) ||
-							!newUserRole.getRole().getId().equals(userRole.getRole().getId()) ||
-							!newUserRole.getGroup().getId().equals(userRole.getGroup().getId())) {
-						
-	    				newUserRolesToAddList.add(newUserRole);
-	    			}
-	    		}
-	    	}
-	    	
-	    	userRolesToSaveList.addAll(newUserRolesToAddList);
-	    	
+    		for (final UserRole newUserRole : selectedUserRoles) {
+    			for (final UserRole userRole : userRolesToSaveList) {
+    				if (!newUserRole.getRole().getId().equals(userRole.getRole().getId())) {
+    					newUserRolesToAddList.add(newUserRole);
+    				}
+    			}
+    		}
+    		
+    		userRolesToSaveList.addAll(newUserRolesToAddList);
+    		
     	} else {
     		userRolesToSaveList.addAll(selectedUserRoles);
     	}

@@ -16,7 +16,7 @@ import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;
 import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.permit.Permit;
-import com.wedonegood.userRole.RoleGroups;
+import com.wedonegood.roles.api.model.entity.Role;
 
 @Entity
 public class Employee extends BaseEntity {
@@ -91,7 +91,7 @@ public class Employee extends BaseEntity {
     private String profilePicture;
     
     @Transient
-    private List<RoleGroups> roleGroups;
+    private List<Role> roles;
 
 	/**
 	 * @return the user
@@ -388,16 +388,16 @@ public class Employee extends BaseEntity {
 	}
 
 	/**
-	 * @return the roleGroups
+	 * @return the roles
 	 */
-	public List<RoleGroups> getRoleGroups() {
-		return roleGroups;
+	public List<Role> getRoles() {
+		return roles;
 	}
 
 	/**
-	 * @param roleGroups the roleGroups to set
+	 * @param roles the roles to set
 	 */
-	public void setRoleGroups(List<RoleGroups> roleGroups) {
-		this.roleGroups = roleGroups;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
 	}
 }

@@ -13,10 +13,12 @@ file:
     passport:
       scan: passportScan
     small: small
+    medium: medium
     big: big
     preview: preview
     
   size:
     small: 44
+    medium: 56
     big: 138
     passport: 99

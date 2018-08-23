@@ -30,12 +30,15 @@ public class UploadServiceImpl implements UploadService {
     private final static String FILE_NAME_PROFILE_PICTURE = "file.name.profile.picture";
     private final static String FILE_NAME_PASSPORT_SCAN = "file.name.passport.scan";
     private final static String FILE_NAME_SMALL = "file.name.small";
+    private final static String FILE_NAME_MEDIUM = "file.name.medium";
     private final static String FILE_NAME_BIG = "file.name.big";
     private final static String FILE_NAME_PREVIEW = "file.name.preview";
     private final static String FILE_SIZE_SMALL = "file.size.small";
+    private final static String FILE_SIZE_MEDIUM = "file.size.medium";
     private final static String FILE_SIZE_BIG = "file.size.big";
 	private final static String FILE_SIZE_PREVIEW = "file.size.preview";
 	final static int SCALED_SIZE_SMALL = 44;
+	final static int SCALED_SIZE_MEDIUM = 56;
 	final static int SCALED_SIZE_BIG = 138;
 	final static int SCALED_SIZE_PREVIEW = 99;
     
@@ -50,6 +53,7 @@ public class UploadServiceImpl implements UploadService {
 	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_SMALL, SCALED_SIZE_SMALL), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_SMALL) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_MEDIUM, SCALED_SIZE_MEDIUM), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_MEDIUM) + originalFileName.substring(originalFileName.indexOf("."))), 300);
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_BIG, SCALED_SIZE_BIG), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_BIG) + originalFileName.substring(originalFileName.indexOf("."))), 300);
 	    
         return f.getPath();
@@ -87,6 +91,15 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public String getFilePath(final Long employeeId, final String fileName) {
     	return this.env.getProperty(UPLOADS_FOLDER) + employeeId + "\\" + fileName;
+    }
+    
+    @Override
+    public void deletePassportScan(final Long employeeId, final String filePath) {
+    	final File file = new File(filePath);
+    	file.delete();
+    	
+    	final File preview = new File(this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
+    	preview.delete();
     }
     
     /**

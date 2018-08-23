@@ -8,4 +8,5 @@ public interface UploadService {
     String createPassportScan(final Long employeeId, final String originalFileName, final InputStream file) throws IOException;
     String createPassportScanPdf(final Long employeeId, final String originalFileName, final InputStream file) throws IOException;
     String getFilePath(final Long employeeId, final String fileName);
+    void deletePassportScan(final Long employeeId, final String filePath);
 }

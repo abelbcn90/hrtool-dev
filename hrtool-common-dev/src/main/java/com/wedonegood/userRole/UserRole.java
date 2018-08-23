@@ -12,7 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.wedonegood.common.model.common.BaseEntity;
 import com.wedonegood.common.user.api.model.entity.User;
-import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.roles.api.model.entity.Role;
 
 /**
@@ -34,19 +33,13 @@ public class UserRole extends BaseEntity {
 	@JoinColumn(name = "role_id")
 	private Role role;
 	
-	@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "group_id")
-	private Groups group;
-	
 	public UserRole() {
 		
 	}
 	
-	public UserRole(final User user, final Role role, final Groups group) {
+	public UserRole(final User user, final Role role) {
 		this.user = user;
 		this.role = role;
-		this.group = group;
 	}
 
 	/**
@@ -75,19 +68,5 @@ public class UserRole extends BaseEntity {
 	 */
 	public void setRole(Role role) {
 		this.role = role;
-	}
-
-	/**
-	 * @return the group
-	 */
-	public Groups getGroup() {
-		return group;
-	}
-
-	/**
-	 * @param group the group to set
-	 */
-	public void setGroup(Groups group) {
-		this.group = group;
 	}
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,15 +31,19 @@ import io.swagger.annotations.ApiResponses;
 @Api(value="Image", description="Operations pertaining to images", position = 6)
 public class ImageController {
 
-	final static int SCALED_SIZE_BIG = 138;
-	final static int SCALED_SIZE_SMALL = 44;
-	final static int SCALED_SIZE_PASSPORT = 99;
+	private final static String FILE_NAME_SMALL = "file.name.small";
+    private final static String FILE_NAME_MEDIUM = "file.name.medium";
+    private final static String FILE_NAME_BIG = "file.name.big";
+    private final static String FILE_NAME_PREVIEW = "file.name.preview";
 	
     @Autowired
     private EmployeeService employeeService;
     
     @Autowired
     private UploadService uploadService;
+    
+    @Autowired
+	private Environment env;
 
     @GetMapping(value = "/profilePicture/{employeeId}/small", produces = {"image/png", "image/jpg"})
     @ApiOperation(value = "Get small profile picture", code = 200)
@@ -46,20 +51,16 @@ public class ImageController {
     		@ApiResponse(code = 200, message = "Get small profile picture")
     })
     public ResponseEntity getSmallProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-        final Employee employee = this.employeeService.get(employeeId);
-    	
-        if (null == employee || null == employee.getProfilePicture() || employee.getProfilePicture().isEmpty()) {
-    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    	}
-        
-        final File file = new File(this.uploadService.getFilePath(employee.getId(), "small" + employee.getProfilePicture().substring(employee.getProfilePicture().lastIndexOf("."))));
-        final String contentType = Files.probeContentType(file.toPath());
-        final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-        
-        return ResponseEntity.ok()
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(resource);
+    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_SMALL));
+    }
+    
+    @GetMapping(value = "/profilePicture/{employeeId}/medium", produces = {"image/png", "image/jpg"})
+    @ApiOperation(value = "Get medium profile picture", code = 200)
+    @ApiResponses(value = {
+    		@ApiResponse(code = 200, message = "Get medium profile picture")
+    })
+    public ResponseEntity getMediumProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
+    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_MEDIUM));
     }
     
     @GetMapping(value = "/profilePicture/{employeeId}/big", produces = {"image/png", "image/jpg"})
@@ -68,13 +69,24 @@ public class ImageController {
     		@ApiResponse(code = 200, message = "Get big profile picture")
     })
     public ResponseEntity getBigProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-final Employee employee = this.employeeService.get(employeeId);
+    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_BIG));
+    }
+    
+    /**
+     * 
+     * @param employeeId
+     * @param fileSizeName
+     * @return
+     * @throws IOException
+     */
+    private ResponseEntity getProfilePictureBySize(final Long employeeId, final String fileSizeName) throws IOException {
+    	final Employee employee = this.employeeService.get(employeeId);
     	
         if (null == employee || null == employee.getProfilePicture() || employee.getProfilePicture().isEmpty()) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePath(employee.getId(), "big" + employee.getProfilePicture().substring(employee.getProfilePicture().lastIndexOf("."))));
+        final File file = new File(this.uploadService.getFilePath(employee.getId(), fileSizeName + employee.getProfilePicture().substring(employee.getProfilePicture().lastIndexOf("."))));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         
@@ -118,7 +130,7 @@ final Employee employee = this.employeeService.get(employeeId);
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePath(employee.getId(), "preview.jpg"));
+        final File file = new File(this.uploadService.getFilePath(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         

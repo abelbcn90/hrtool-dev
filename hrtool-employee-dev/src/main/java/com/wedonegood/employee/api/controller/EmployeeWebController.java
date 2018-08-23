@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.wedonegood.billing.BillingService;
 import com.wedonegood.common.language.LanguageService;
+import com.wedonegood.common.model.user.UserService;
 import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.contract.ContractService;
 import com.wedonegood.employee.api.EmployeeService;
@@ -57,6 +58,9 @@ public class EmployeeWebController {
 	@Autowired
 	private UserRoleService userRoleService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("")
     public String index(final Model model) {
 		model.addAttribute("employeeList", this.employeeService.getEmployees(UserInfoContext.getCurrent().getClientId(), PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
@@ -75,6 +79,7 @@ public class EmployeeWebController {
 		model.addAttribute("billingList", this.billingService.getBilings());
 		model.addAttribute("languageList", this.languageService.getLanguages());
 		model.addAttribute("roleList", this.roleService.findAllByClientIdAndActiveIsTrue(UserInfoContext.getCurrent().getClientId()));
+		model.addAttribute("managerList", this.userService.findManagers(UserInfoContext.getCurrent().getClientId()));
 		
 		System.out.println("New Employee");
 		
@@ -84,7 +89,7 @@ public class EmployeeWebController {
 	@GetMapping("/edit/{employeeId}")
     public String editEmployee(@PathVariable("employeeId") final Long employeeId, final Model model) {
 		final Employee employee = this.employeeService.get(employeeId);
-		employee.setRoleGroups(this.getRoleGroups(employee.getUser().getId()));
+		employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
 		
 		model.addAttribute("employee", new EmployeeDto(employee));
 		
@@ -95,25 +100,10 @@ public class EmployeeWebController {
 		model.addAttribute("languageList", this.languageService.getLanguages());
 		model.addAttribute("roleList", this.roleService.findAllByClientIdAndActiveIsTrue(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("userRoleList", this.userRoleService.findAllByUserIdAndActiveIsTrue(employee.getUser().getId()));
+		model.addAttribute("managerList", this.userService.findManagers(UserInfoContext.getCurrent().getClientId()));
 		
 		System.out.println("Edit Employee");
 		
         return VIEW_NAME_EDIT;
-    }
-	
-	/**
-     * 
-     * @param userId
-     * @return
-     */
-    private List<RoleGroups> getRoleGroups(final Long userId) {
-    	final List<Role> userRoles = this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(userId);
-        final List<RoleGroups> roleGroups = new ArrayList<RoleGroups>();
-        
-        for (final Role role : userRoles) {
-        	roleGroups.add(new RoleGroups(role, this.groupService.findGroupsFromUserRoleByUserIdAndRoleIdAndActiveIsTrue(userId, role.getId())));
-        }
-        
-        return roleGroups;
     }
 }

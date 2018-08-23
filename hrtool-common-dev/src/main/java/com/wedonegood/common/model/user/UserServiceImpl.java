@@ -1,6 +1,8 @@
 package com.wedonegood.common.model.user;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,5 +93,10 @@ public class UserServiceImpl implements UserService {
         user.addAudit();
         
         return this.userRepository.saveAndFlush(user);
+    }
+    
+    @Override
+    public List<User> findManagers(final Long client) {
+    	return this.userRepository.findManagers(client);
     }
 }
