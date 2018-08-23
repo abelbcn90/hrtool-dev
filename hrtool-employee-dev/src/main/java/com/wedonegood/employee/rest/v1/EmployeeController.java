@@ -147,7 +147,7 @@ public class EmployeeController extends PagingController {
         employee.setCity(employeeDto.getCity());
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
-        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId()));
+        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId().getUserId()));
         
         // Job details
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));
@@ -219,7 +219,7 @@ public class EmployeeController extends PagingController {
         employee.setCity(employeeDto.getCity());
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
-        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId()));
+        employee.setManager(this.userService.getUserByUserId(employeeDto.getManagerId().getUserId()));
         
         // Job details
         employee.setPermit(this.permitService.get(employeeDto.getPermitId()));

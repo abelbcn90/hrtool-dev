@@ -3,8 +3,13 @@ server:
   port: 8087
 
 
-uploads:
-  folder: uploads/
+folder:
+  uploads: uploads/
+  profile:
+    picture: profilePicture/
+  passport:
+    scan: passportScan/
+  
 
 file:
   name:

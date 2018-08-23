@@ -78,12 +78,9 @@ public class EmployeeDto {
     private String sicknessTaken;
     
     @ApiModelProperty(value = "Employee manager", position = 21)
-    private Long managerId;
+    private UserDto managerId;
     
-    @ApiModelProperty(value = "Employee profilePicture", position = 22)
-    private String profilePicture;
-    
-    @ApiModelProperty(value = "Employee roles", position = 23)
+    @ApiModelProperty(value = "Employee roles", position = 22)
     private List<RoleDto> roles;
     
     @ApiModelProperty(readOnly = true, value = "Active flag", position = 100)
@@ -130,16 +127,7 @@ public class EmployeeDto {
     	this.vacationAllowance = employee.getVacationAllowance();
     	this.vacationTaken = employee.getVacationTaken();
     	this.sicknessTaken = employee.getSicknessTaken();
-    	this.managerId = employee.getManager().getUserId();
-    	this.profilePicture = employee.getProfilePicture();
-    	
-//    	this.roleGroups = new ArrayList<RoleGroupsDto>();
-//    	
-//    	if (null != employee.getRoleGroups()) {
-//	    	for (final RoleGroups rg : employee.getRoleGroups()) {
-//	    		this.roleGroups.add(new RoleGroupsDto(rg.getRole(), rg.getGroups()));
-//	    	}
-//    	}
+    	this.managerId = new UserDto(employee.getManager());
     	
     	this.roles = new ArrayList<RoleDto>();
     	
@@ -443,29 +431,15 @@ public class EmployeeDto {
 	/**
 	 * @return the managerId
 	 */
-	public Long getManagerId() {
+	public UserDto getManagerId() {
 		return managerId;
 	}
 
 	/**
 	 * @param managerId the managerId to set
 	 */
-	public void setManagerId(Long managerId) {
+	public void setManagerId(UserDto managerId) {
 		this.managerId = managerId;
-	}
-
-	/**
-	 * @return the profilePicture
-	 */
-	public String getProfilePicture() {
-		return profilePicture;
-	}
-
-	/**
-	 * @param profilePicture the profilePicture to set
-	 */
-	public void setProfilePicture(String profilePicture) {
-		this.profilePicture = profilePicture;
 	}
 
 	/**

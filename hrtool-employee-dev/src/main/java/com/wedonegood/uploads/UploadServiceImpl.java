@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UploadServiceImpl implements UploadService {
 
-    private final static String UPLOADS_FOLDER = "uploads.folder";
+    private final static String FOLDER_UPLOADS = "folder.uploads";
+    private final static String FOLDER_PROFILE_PICTURE = "folder.profile.picture";
+    private final static String FOLDER_PASSPORT_SCAN = "folder.passport.scan";
     private final static String FILE_NAME_PROFILE_PICTURE = "file.name.profile.picture";
     private final static String FILE_NAME_PASSPORT_SCAN = "file.name.passport.scan";
     private final static String FILE_NAME_SMALL = "file.name.small";
@@ -46,34 +48,38 @@ public class UploadServiceImpl implements UploadService {
 	private Environment env;
 
     @Override
-    public String createProfilePicture(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-        final File f = new File(this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + originalFileName.substring(originalFileName.indexOf("."))));
+    public String createProfilePicture(final Long userId, final String originalFileName, final InputStream file) throws IOException {
+        final File f = new File(this.getFilePathProfilePicture(userId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + originalFileName.substring(originalFileName.indexOf("."))));
         
 	    f.getParentFile().mkdirs();
 	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    
-	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_SMALL, SCALED_SIZE_SMALL), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_SMALL) + originalFileName.substring(originalFileName.indexOf("."))), 300);
-	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_MEDIUM, SCALED_SIZE_MEDIUM), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_MEDIUM) + originalFileName.substring(originalFileName.indexOf("."))), 300);
-	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_BIG, SCALED_SIZE_BIG), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_BIG) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_SMALL, SCALED_SIZE_SMALL), this.getFilePathProfilePicture(
+	    		userId, this.env.getProperty(FILE_NAME_SMALL) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_MEDIUM, SCALED_SIZE_MEDIUM), this.getFilePathProfilePicture(
+	    		userId, this.env.getProperty(FILE_NAME_MEDIUM) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_BIG, SCALED_SIZE_BIG), this.getFilePathProfilePicture(
+	    		userId, this.env.getProperty(FILE_NAME_BIG) + originalFileName.substring(originalFileName.indexOf("."))), 300);
 	    
         return f.getPath();
     }
     
     @Override
     public String createPassportScan(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-    	final File f = new File(this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
+    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
     	
     	f.getParentFile().mkdirs();
     	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
     	
-    	ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+    	ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW), this.getFilePathPassportScan(
+    			employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + originalFileName.substring(originalFileName.indexOf("."))), 300);
     	
     	return f.getPath();
     }
     
     @Override
     public String createPassportScanPdf(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-    	final File f = new File(this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
+    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
     	
     	f.getParentFile().mkdirs();
     	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -81,7 +87,8 @@ public class UploadServiceImpl implements UploadService {
     	final PDDocument pdDocument = PDDocument.load(f, MemoryUsageSetting.setupTempFileOnly());
 		final PDFRenderer pdfRenderer = new PDFRenderer(pdDocument);
 		
-		ImageIOUtil.writeImage(this.resizeImagePdf(pdfRenderer, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW, 0), this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"), 300);
+		ImageIOUtil.writeImage(this.resizeImagePdf(pdfRenderer, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW, 0), this.getFilePathPassportScan(
+				employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"), 300);
 		
 		pdDocument.close();
     	
@@ -89,8 +96,13 @@ public class UploadServiceImpl implements UploadService {
     }
     
     @Override
-    public String getFilePath(final Long employeeId, final String fileName) {
-    	return this.env.getProperty(UPLOADS_FOLDER) + employeeId + "\\" + fileName;
+    public String getFilePathProfilePicture(final Long userId, final String fileName) {
+    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PROFILE_PICTURE) + userId + "\\" + fileName;
+    }
+    
+    @Override
+    public String getFilePathPassportScan(final Long employeeId, final String fileName) {
+    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PASSPORT_SCAN) + employeeId + "\\" + fileName;
     }
     
     @Override
@@ -98,7 +110,7 @@ public class UploadServiceImpl implements UploadService {
     	final File file = new File(filePath);
     	file.delete();
     	
-    	final File preview = new File(this.getFilePath(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
+    	final File preview = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
     	preview.delete();
     }
     

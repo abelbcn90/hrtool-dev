@@ -18,6 +18,7 @@ public class UserInfoContextImpl implements UserInfoContext {
     private String userPassword;
     private Long clientId;
     private String languageCode;
+    private String profilePicture;
 
     private int userAttemptCnt;
     
@@ -32,6 +33,7 @@ public class UserInfoContextImpl implements UserInfoContext {
         this.userPassword = user.getUserPassword();
         this.clientId = user.getClientId();
         this.languageCode = user.getLanguageCode();
+        this.profilePicture = user.getProfilePicture();
 
         this.userAttemptCnt = user.getUserAttemptCnt();
 
@@ -135,5 +137,10 @@ public class UserInfoContextImpl implements UserInfoContext {
 	@Override
 	public String getLanguageCode() {
 		return this.languageCode;
+	}
+	
+	@Override
+	public String getProfilePicture() {
+		return this.profilePicture;
 	}
 }

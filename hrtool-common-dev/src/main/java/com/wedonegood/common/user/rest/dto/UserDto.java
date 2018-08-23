@@ -13,8 +13,13 @@ public class UserDto {
     private String userPhone;
     private String languageCode;
     private String password;
+    private String profilePicture;
 
     public UserDto() {
+    }
+    
+    public UserDto(final Long userId) {
+    	this.userId = userId;
     }
     
     public UserDto(User user) {
@@ -24,6 +29,7 @@ public class UserDto {
         this.userLastName = user.getUserLastName();
         this.userPhone = user.getUserPhone();
         this.languageCode = user.getLanguage().getCode();
+        this.profilePicture = user.getProfilePicture();
     }
 
 	/**
@@ -122,5 +128,19 @@ public class UserDto {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	/**
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 }

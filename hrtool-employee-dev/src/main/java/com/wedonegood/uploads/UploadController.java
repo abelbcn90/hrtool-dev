@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wedonegood.common.model.user.UserService;
 import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.employee.api.EmployeeService;
 import com.wedonegood.employee.api.model.entity.Employee;
@@ -37,22 +38,26 @@ public class UploadController {
     
     @Autowired
     private EmployeeService employeeService;
+    
+    @Autowired
+    private UserService userService;
 
-    @PutMapping(path = "/profilePicture/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
+    @PutMapping(path = "/profilePicture/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")
     @ApiOperation(value = "Create new profilePicture", code = 201)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Created"),
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 401, message = "Access denied")}
     )
-    public ResponseEntity<String> createProfilePicture(@PathVariable("employeeId") final Long employeeId, @RequestPart(required = true) MultipartFile file) throws IOException {
-        final String path = this.uploadService.createProfilePicture(employeeId, file.getOriginalFilename(), file.getInputStream());
+    public ResponseEntity<String> createProfilePicture(@PathVariable("userId") final Long userId, @RequestPart(required = true) MultipartFile file) throws IOException {
+        final String path = this.uploadService.createProfilePicture(userId, file.getOriginalFilename(), file.getInputStream());
         
-        final Employee employee = this.employeeService.get(employeeId);
-    	employee.setProfilePicture(path);
-    	this.employeeService.save(employee);
+        final User user = this.userService.getUserByUserId(userId);
+    	user.setProfilePicture(path);
+    	
+    	this.userService.save(user);
         
-        return ResponseEntity.ok(IMAGES_SERVICE_PATH + "profilePicture/" + employee.getId() + "/full");
+        return ResponseEntity.ok(IMAGES_SERVICE_PATH + "profilePicture/" + userId + "/full");
     }
     
     @PutMapping(path = "/passportScan/{employeeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json")

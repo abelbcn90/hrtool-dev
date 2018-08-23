@@ -35,8 +35,12 @@ clickatell:
 
 
 # Application properties
-uploads:
-  folder: uploads/
+folder:
+  uploads: uploads/
+  profile:
+    picture: profilePicture/
+  passport:
+    scan: passportScan/
 
 file:
   name:

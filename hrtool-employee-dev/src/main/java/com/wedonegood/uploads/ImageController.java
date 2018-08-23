@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wedonegood.common.model.user.UserService;
+import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.employee.api.EmployeeService;
 import com.wedonegood.employee.api.model.entity.Employee;
 
@@ -44,49 +46,52 @@ public class ImageController {
     
     @Autowired
 	private Environment env;
+    
+    @Autowired
+    private UserService userService;
 
-    @GetMapping(value = "/profilePicture/{employeeId}/small", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/small", produces = {"image/png", "image/jpg"})
     @ApiOperation(value = "Get small profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get small profile picture")
     })
-    public ResponseEntity getSmallProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_SMALL));
+    public ResponseEntity getSmallProfilePicture(@PathVariable("userId") final Long userId) throws IOException {
+    	return this.getProfilePictureBySize(userId, this.env.getProperty(FILE_NAME_SMALL));
     }
     
-    @GetMapping(value = "/profilePicture/{employeeId}/medium", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/medium", produces = {"image/png", "image/jpg"})
     @ApiOperation(value = "Get medium profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get medium profile picture")
     })
-    public ResponseEntity getMediumProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_MEDIUM));
+    public ResponseEntity getMediumProfilePicture(@PathVariable("userId") final Long userId) throws IOException {
+    	return this.getProfilePictureBySize(userId, this.env.getProperty(FILE_NAME_MEDIUM));
     }
     
-    @GetMapping(value = "/profilePicture/{employeeId}/big", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/big", produces = {"image/png", "image/jpg"})
     @ApiOperation(value = "Get big profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get big profile picture")
     })
-    public ResponseEntity getBigProfilePicture(@PathVariable("employeeId") final Long employeeId) throws IOException {
-    	return this.getProfilePictureBySize(employeeId, this.env.getProperty(FILE_NAME_BIG));
+    public ResponseEntity getBigProfilePicture(@PathVariable("userId") final Long userId) throws IOException {
+    	return this.getProfilePictureBySize(userId, this.env.getProperty(FILE_NAME_BIG));
     }
     
     /**
      * 
-     * @param employeeId
+     * @param userId
      * @param fileSizeName
      * @return
      * @throws IOException
      */
-    private ResponseEntity getProfilePictureBySize(final Long employeeId, final String fileSizeName) throws IOException {
-    	final Employee employee = this.employeeService.get(employeeId);
+    private ResponseEntity getProfilePictureBySize(final Long userId, final String fileSizeName) throws IOException {
+    	final User user = this.userService.getUserByUserId(userId);
     	
-        if (null == employee || null == employee.getProfilePicture() || employee.getProfilePicture().isEmpty()) {
+        if (null == user || null == user.getProfilePicture() || user.getProfilePicture().isEmpty()) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePath(employee.getId(), fileSizeName + employee.getProfilePicture().substring(employee.getProfilePicture().lastIndexOf("."))));
+        final File file = new File(this.uploadService.getFilePathProfilePicture(userId, fileSizeName + user.getProfilePicture().substring(user.getProfilePicture().lastIndexOf("."))));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         
@@ -96,19 +101,19 @@ public class ImageController {
                 .body(resource);
     }
     
-    @GetMapping(value = "/profilePicture/{employeeId}/full", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/full", produces = {"image/png", "image/jpg"})
     @ApiOperation(value = "Get big profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get full profile picture")
     })
-    public ResponseEntity getProfilePictureFull(@PathVariable("employeeId") final Long employeeId) throws IOException {
-    	final Employee employee = this.employeeService.get(employeeId);
+    public ResponseEntity getProfilePictureFull(@PathVariable("userId") final Long userId) throws IOException {
+    	final User user = this.userService.getUserByUserId(userId);
     	
-    	if (null == employee || null == employee.getProfilePicture() || employee.getProfilePicture().isEmpty()) {
+    	if (null == user || null == user.getProfilePicture() || user.getProfilePicture().isEmpty()) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
     	
-    	final File file = new File(employee.getProfilePicture());
+    	final File file = new File(user.getProfilePicture());
     	final String contentType = Files.probeContentType(file.toPath());
     	final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
     	
@@ -130,7 +135,7 @@ public class ImageController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePath(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
+        final File file = new File(this.uploadService.getFilePathPassportScan(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         

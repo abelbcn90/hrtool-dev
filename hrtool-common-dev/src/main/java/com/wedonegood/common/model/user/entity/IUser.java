@@ -8,4 +8,5 @@ public interface IUser {
     String getUserPhone();
     Long getClientId();
     String getLanguageCode();
+    String getProfilePicture();
 }

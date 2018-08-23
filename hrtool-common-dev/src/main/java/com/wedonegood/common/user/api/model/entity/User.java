@@ -14,10 +14,6 @@ import com.wedonegood.common.model.user.entity.IUser;
 @Entity
 public class User extends BaseEntity implements IUser {
 
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.AUTO)
-//    private Long userId;
-
     @Column(unique = true, nullable = false)
     private String userEmail;
 
@@ -46,6 +42,17 @@ public class User extends BaseEntity implements IUser {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "language_code")
     private Language language;
+    
+    @Column(nullable = true)
+    private String profilePicture;
+    
+    public User() {
+    	
+    }
+    
+    public User(final Long userId) {
+    	this.setId(userId);
+    }
     
     @Override
     public Long getUserId() {
@@ -144,5 +151,19 @@ public class User extends BaseEntity implements IUser {
 	 */
 	public void setLanguage(Language language) {
 		this.language = language;
+	}
+
+	/**
+	 * @return the profilePicture
+	 */
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	/**
+	 * @param profilePicture the profilePicture to set
+	 */
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
 	}
 }
