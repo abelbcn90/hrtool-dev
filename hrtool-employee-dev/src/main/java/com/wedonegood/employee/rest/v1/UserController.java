@@ -15,7 +15,6 @@ import com.wedonegood.common.model.user.UserService;
 import com.wedonegood.common.security.UserInfoContext;
 import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.common.user.rest.dto.UserDto;
-import com.wedonegood.employee.rest.common.PagingController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping(value = "/api/v1/user")
 @Api(value="User", description="Operations pertaining to Users", position = 3)
-public class UserController extends PagingController {
+public class UserController {
 	
 	@Autowired
 	private UserService userService;

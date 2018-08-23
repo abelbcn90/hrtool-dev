@@ -1,8 +1,5 @@
 package com.wedonegood.employee.api.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,8 +20,6 @@ import com.wedonegood.employee.rest.v1.dto.EmployeeDto;
 import com.wedonegood.groups.api.GroupService;
 import com.wedonegood.permit.PermitService;
 import com.wedonegood.roles.api.RoleService;
-import com.wedonegood.roles.api.model.entity.Role;
-import com.wedonegood.userRole.RoleGroups;
 import com.wedonegood.userRole.UserRoleService;
 
 @Controller
