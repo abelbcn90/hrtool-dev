@@ -78,7 +78,7 @@ public class EmployeeDto {
     private String sicknessTaken;
     
     @ApiModelProperty(value = "Employee manager", position = 21)
-    private UserDto managerId;
+    private UserDto manager;
     
     @ApiModelProperty(value = "Employee roles", position = 22)
     private List<RoleDto> roles;
@@ -127,7 +127,7 @@ public class EmployeeDto {
     	this.vacationAllowance = employee.getVacationAllowance();
     	this.vacationTaken = employee.getVacationTaken();
     	this.sicknessTaken = employee.getSicknessTaken();
-    	this.managerId = new UserDto(employee.getManager());
+    	this.manager = new UserDto(employee.getManager());
     	
     	this.roles = new ArrayList<RoleDto>();
     	
@@ -429,17 +429,17 @@ public class EmployeeDto {
 	}
 
 	/**
-	 * @return the managerId
+	 * @return the manager
 	 */
-	public UserDto getManagerId() {
-		return managerId;
+	public UserDto getManager() {
+		return manager;
 	}
 
 	/**
-	 * @param managerId the managerId to set
+	 * @param manager the manager to set
 	 */
-	public void setManagerId(UserDto managerId) {
-		this.managerId = managerId;
+	public void setManager(UserDto manager) {
+		this.manager = manager;
 	}
 
 	/**

@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.google.common.net.MediaType;
+
 @Service
 public class UploadServiceImpl implements UploadService {
 
@@ -48,38 +50,41 @@ public class UploadServiceImpl implements UploadService {
 	private Environment env;
 
     @Override
-    public String createProfilePicture(final Long userId, final String originalFileName, final InputStream file) throws IOException {
-        final File f = new File(this.getFilePathProfilePicture(userId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + originalFileName.substring(originalFileName.indexOf("."))));
+    public String createProfilePicture(final Long userId, final String contentType, final InputStream file) throws IOException {
+        final String extention = "." + contentType.substring(contentType.indexOf("/") + 1);
+    	final File f = new File(this.getFilePathProfilePicture(userId, this.env.getProperty(FILE_NAME_PROFILE_PICTURE) + extention));
         
 	    f.getParentFile().mkdirs();
 	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_SMALL, SCALED_SIZE_SMALL), this.getFilePathProfilePicture(
-	    		userId, this.env.getProperty(FILE_NAME_SMALL) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    		userId, this.env.getProperty(FILE_NAME_SMALL) + extention), 300);
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_MEDIUM, SCALED_SIZE_MEDIUM), this.getFilePathProfilePicture(
-	    		userId, this.env.getProperty(FILE_NAME_MEDIUM) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    		userId, this.env.getProperty(FILE_NAME_MEDIUM) + extention), 300);
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_BIG, SCALED_SIZE_BIG), this.getFilePathProfilePicture(
-	    		userId, this.env.getProperty(FILE_NAME_BIG) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+	    		userId, this.env.getProperty(FILE_NAME_BIG) + extention), 300);
 	    
         return f.getPath();
     }
     
     @Override
-    public String createPassportScan(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
+    public String createPassportScan(final Long employeeId, final String contentType, final InputStream file) throws IOException {
+    	final String extention = "." + contentType.substring(contentType.indexOf("/") + 1);
+    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + extention));
     	
     	f.getParentFile().mkdirs();
     	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
     	
     	ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW), this.getFilePathPassportScan(
-    			employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + originalFileName.substring(originalFileName.indexOf("."))), 300);
+    			employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + extention), 300);
     	
     	return f.getPath();
     }
     
     @Override
-    public String createPassportScanPdf(final Long employeeId, final String originalFileName, final InputStream file) throws IOException {
-    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + originalFileName.substring(originalFileName.indexOf("."))));
+    public String createPassportScanPdf(final Long employeeId, final String contentType, final InputStream file) throws IOException {
+    	final String extention = "." + contentType.substring(contentType.indexOf("/") + 1);
+    	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + extention));
     	
     	f.getParentFile().mkdirs();
     	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -88,7 +93,7 @@ public class UploadServiceImpl implements UploadService {
 		final PDFRenderer pdfRenderer = new PDFRenderer(pdDocument);
 		
 		ImageIOUtil.writeImage(this.resizeImagePdf(pdfRenderer, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW, 0), this.getFilePathPassportScan(
-				employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"), 300);
+				employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + "." + MediaType.JPEG.subtype()), 300);
 		
 		pdDocument.close();
     	
@@ -110,7 +115,7 @@ public class UploadServiceImpl implements UploadService {
     	final File file = new File(filePath);
     	file.delete();
     	
-    	final File preview = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
+    	final File preview = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + "." + MediaType.JPEG.subtype()));
     	preview.delete();
     }
     

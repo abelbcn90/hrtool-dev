@@ -196,7 +196,7 @@
 					</div>
 					
 					<div>
-						<select th:field="*{employee.managerId}" th:remove="all-but-first">
+						<select th:field="*{employee.manager}" th:remove="all-but-first">
 			                <option th:each="m : ${managerList}" th:value="${m.id}" th:text="${m.userFirstName + ' ' + m.userLastName}">Group</option>
 			            </select>
 		            </div>
@@ -245,9 +245,9 @@
 			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
 // 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
 // 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
-			    + ', "managerId" : '
+			    + ', "manager" : '
 		    		+ ' { '
-		    			+ '"userId" : "' + $('#editEmployeeForm').find('#managerId').val() + '"'
+		    			+ '"userId" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
 		    		+ ' } '
 			    // Job details
 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
@@ -320,9 +320,9 @@
 			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
 // 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
 // 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
-			    + ', "managerId" : '
+			    + ', "manager" : '
 		    		+ ' { '
-		    			+ '"userId" : "' + $('#editEmployeeForm').find('#managerId').val() + '"'
+		    			+ '"userId" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
 		    		+ ' } '
 			    // Job details
 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
