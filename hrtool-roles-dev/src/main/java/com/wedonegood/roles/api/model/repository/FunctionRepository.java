@@ -20,7 +20,7 @@ public interface FunctionRepository extends JpaRepository<Function, Long> {
 			"    LEFT JOIN role_function rf ON rf.function_id = f.id" + 
 			"    LEFT JOIN role r ON r.id = rf.role_id" + 
 			"    LEFT JOIN user_role ur ON ur.role_id = r.id" + 
-			"  WHERE ur.user_id = ? AND r.active = true", 
+			"  WHERE ur.user_id = ? AND ur.active = true AND r.active = true", 
 			nativeQuery = true)
     List<String> findFunctionByUserId(final long userId);
 }

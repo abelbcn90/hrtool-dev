@@ -25,6 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Page<Employee> getEmployees(Long client, Pageable pageable) {
         return this.employeeRepository.findAllByClientAndActiveIsTrue(client, pageable);
     }
+
+    @Override
+    public Page<Employee> getEmployeesByManager(long managerId, Pageable pageable) {
+        return this.employeeRepository.findAllByManagerAndActiveIsTrue(managerId, pageable);
+    }
     
     @Override
     public Page<Employee> searchEmployees(final Long client, final String keyword, final Pageable pageable) {

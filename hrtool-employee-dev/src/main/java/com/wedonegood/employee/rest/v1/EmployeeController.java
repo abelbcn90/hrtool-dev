@@ -1,5 +1,6 @@
 package com.wedonegood.employee.rest.v1;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,7 @@ import com.wedonegood.groups.api.GroupService;
 import com.wedonegood.permit.PermitService;
 import com.wedonegood.roles.api.RoleService;
 import com.wedonegood.roles.rest.v1.dto.RoleDto;
+import com.wedonegood.timesheet.TimesheetService;
 import com.wedonegood.userRole.UserRole;
 import com.wedonegood.userRole.UserRoleService;
 
@@ -85,6 +87,9 @@ public class EmployeeController extends PagingController {
 	@Autowired
 	private UserRoleService userRoleService;
 	
+	@Autowired
+	private TimesheetService timesheetService;
+	
 	@GetMapping("/list/{page}")
     @ApiOperation(value = "Get employees", nickname = "getEmployees")
     @ApiResponses(value = {
@@ -95,6 +100,19 @@ public class EmployeeController extends PagingController {
         final Page<Employee> g = this.employeeService.getEmployees(UserInfoContext.getCurrent().getClientId(), pageable);
         final ResponseEntity<List<EmployeeDto>> resp = this.pageResponse(g, EmployeeDto::new);
         
+        return resp;
+    }
+
+    @GetMapping("/list-my/{page}")
+    @ApiOperation(value = "Get employees", nickname = "getMyEmployees")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of employees", response = EmployeeDto.class, responseContainer = "List")
+    })
+    public ResponseEntity<List<EmployeeDto>> getMyEmployees(@PathVariable("page") final Optional<Integer> page) {
+        final Pageable pageable = PageRequest.of(page.orElse(0), 3, Sort.Direction.ASC, "id");
+        UserInfoContext uic = UserInfoContext.getCurrent();
+        final Page<Employee> g = this.employeeService.getEmployeesByManager(uic.getUserId(), pageable);
+        final ResponseEntity<List<EmployeeDto>> resp = this.pageResponse(g, EmployeeDto::new);
         return resp;
     }
 	
@@ -114,7 +132,8 @@ public class EmployeeController extends PagingController {
 	@PutMapping("/")
     @ApiOperation(value = "Add new employee", nickname = "addEmployee")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "new employee", response = EmployeeDto.class)
+            @ApiResponse(code = 200, message = "new employee", response = EmployeeDto.class),
+            @ApiResponse(code = 208, message = "This email address is being used by another user. Please pick a different one or contact your administrator.", response = EmployeeDto.class)
     })
 	public ResponseEntity<EmployeeDto> addEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = new Employee();
@@ -172,13 +191,17 @@ public class EmployeeController extends PagingController {
         
         employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
         
+//        final LocalDate date = LocalDate.now();
+//        this.timesheetService.createIfNotExistAndSave(employee, date.getYear(), date.getMonthValue());
+        
         return ResponseEntity.ok(new EmployeeDto(employee));
     }
 	
 	@PatchMapping("/")
     @ApiOperation(value = "Update employee", nickname = "updateEmployee")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Employee Updated", response = EmployeeDto.class)
+            @ApiResponse(code = 200, message = "Employee Updated", response = EmployeeDto.class),
+            @ApiResponse(code = 208, message = "This email address is being used by another user. Please pick a different one or contact your administrator.", response = EmployeeDto.class)
     })
 	public ResponseEntity<EmployeeDto> updateEmployee(@RequestBody final EmployeeDto employeeDto) {
 		Employee employee = this.employeeService.get(employeeDto.getEmployeeId());
@@ -284,17 +307,38 @@ public class EmployeeController extends PagingController {
     })
     public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("employeeId") final Long employeeId) {
         final Employee employee = this.employeeService.get(employeeId);
-        
+
         if (null == employee) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        
+
         if (!employee.isActive()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        
+
         employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
-        
+
+        return ResponseEntity.ok(new EmployeeDto(employee));
+    }
+
+    @GetMapping(value = "/by-user/{userId}", produces = "application/json")
+    @ApiOperation(value = "Get full Employee data", nickname = "getEmployeeByUserId")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Get Employee", response = EmployeeDto.class)
+    })
+    public ResponseEntity<EmployeeDto> getEmployeeByUserId(@PathVariable("userId") final Long userId) {
+        final Employee employee = this.employeeService.getEmployee(userId);
+
+        if (null == employee) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!employee.isActive()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        employee.setRoles(this.roleService.findRolesFromUserRoleByUserIdAndActiveIsTrue(employee.getUser().getId()));
+
         return ResponseEntity.ok(new EmployeeDto(employee));
     }
     

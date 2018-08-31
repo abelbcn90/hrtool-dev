@@ -33,6 +33,7 @@ import io.swagger.annotations.ApiResponses;
 @Api(value="Image", description="Operations pertaining to images", position = 6)
 public class ImageController {
 
+	private final static String FOLDER_HOME = "folder.home";
 	private final static String FILE_NAME_SMALL = "file.name.small";
     private final static String FILE_NAME_MEDIUM = "file.name.medium";
     private final static String FILE_NAME_BIG = "file.name.big";
@@ -50,7 +51,7 @@ public class ImageController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/profilePicture/{userId}/small", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/small", produces = {"image/png", "image/jpeg"})
     @ApiOperation(value = "Get small profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get small profile picture")
@@ -59,7 +60,7 @@ public class ImageController {
     	return this.getProfilePictureBySize(userId, this.env.getProperty(FILE_NAME_SMALL));
     }
     
-    @GetMapping(value = "/profilePicture/{userId}/medium", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/medium", produces = {"image/png", "image/jpeg"})
     @ApiOperation(value = "Get medium profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get medium profile picture")
@@ -68,7 +69,7 @@ public class ImageController {
     	return this.getProfilePictureBySize(userId, this.env.getProperty(FILE_NAME_MEDIUM));
     }
     
-    @GetMapping(value = "/profilePicture/{userId}/big", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/big", produces = {"image/png", "image/jpeg"})
     @ApiOperation(value = "Get big profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get big profile picture")
@@ -101,7 +102,7 @@ public class ImageController {
                 .body(resource);
     }
     
-    @GetMapping(value = "/profilePicture/{userId}/full", produces = {"image/png", "image/jpg"})
+    @GetMapping(value = "/profilePicture/{userId}/full", produces = {"image/png", "image/jpeg"})
     @ApiOperation(value = "Get big profile picture", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get full profile picture")
@@ -113,7 +114,7 @@ public class ImageController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
     	
-    	final File file = new File(user.getProfilePicture());
+    	final File file = new File(this.env.getProperty(FOLDER_HOME) + user.getProfilePicture());
     	final String contentType = Files.probeContentType(file.toPath());
     	final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
     	
@@ -123,7 +124,7 @@ public class ImageController {
     			.body(resource);
     }
     
-    @GetMapping(value = "/passportScan/{employeeId}/preview", produces = {"image/png", "image/jpg", "application/pdf"})
+    @GetMapping(value = "/passportScan/{employeeId}/preview", produces = {"image/png", "image/jpeg", "application/pdf"})
     @ApiOperation(value = "Get passport scan preview", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get passport scan preview")
@@ -135,7 +136,7 @@ public class ImageController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePathPassportScan(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + ".jpg"));
+        final File file = new File(this.uploadService.getFilePathPassportScan(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + "." + com.google.common.net.MediaType.JPEG.subtype()));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         
@@ -145,7 +146,7 @@ public class ImageController {
                 .body(resource);
     }
     
-    @GetMapping(value = "/passportScan/{employeeId}/full", produces = {"image/png", "image/jpg", "application/pdf"})
+    @GetMapping(value = "/passportScan/{employeeId}/full", produces = {"image/png", "image/jpeg", "application/pdf"})
     @ApiOperation(value = "Get passport scan", code = 200)
     @ApiResponses(value = {
     		@ApiResponse(code = 200, message = "Get passport scan full")
@@ -157,7 +158,7 @@ public class ImageController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
     	
-    	final File file = new File(employee.getPassportScan());
+    	final File file = new File(this.env.getProperty(FOLDER_HOME) + employee.getPassportScan());
     	final String contentType = Files.probeContentType(file.toPath());
     	final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
     	

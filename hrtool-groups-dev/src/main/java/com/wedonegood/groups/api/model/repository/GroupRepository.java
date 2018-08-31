@@ -17,12 +17,13 @@ import com.wedonegood.groups.api.model.entity.Groups;
 @Repository
 public interface GroupRepository extends JpaRepository<Groups, Long> {
 	Page<Groups> findAllByClientIdAndActiveIsTrue(final Long client, final Pageable pageable);
-	List<Groups> findAllByClientIdAndActiveIsTrue(final Long clientId);
+	List<Groups> findAllByClientIdAndActiveIsTrueOrderByIdDesc(final Long clientId);
     Page<Groups> findAllByActiveIsTrue(final Pageable pageable);
     
     @Query(value = "SELECT COUNT(e.id)" +
     		"  FROM employee e" +
-    		"  WHERE e.group_id = ?",
+    		"  WHERE e.group_id = ?" +
+    		"    AND e.active = true",
 			nativeQuery = true)
     Integer findNumberOfEmployeesByGroup(final long groupId);
     

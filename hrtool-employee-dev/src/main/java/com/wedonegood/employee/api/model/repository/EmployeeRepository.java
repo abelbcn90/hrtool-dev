@@ -21,6 +21,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     		" ORDER BY u.user_first_name, u.user_last_name ASC #{#pageable}",
 			nativeQuery = true)
 	Page<Employee> findAllByClientAndActiveIsTrue(Long client, Pageable pageable);
+
+    @Query("select e from Employee e where e.active = true and e.manager.id = ?1")
+    Page<Employee> findAllByManagerAndActiveIsTrue(long managerId, Pageable pageable);
     
     @Query(value = "SELECT e.* " +
     		" FROM employee e " +
@@ -43,9 +46,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Employee findEmployeeByUserIdAndActiveIsTrue(long userId);
 	Employee findEmployeeByIdAndActiveIsTrue(long employeeId);
     
-    @Query(value = "SELECT COUNT(e.*) " +
+	@Query(value = "SELECT COUNT(e.id) " +
     		"  FROM employee e " +
-    		"  WHERE e.group_id = ? ",
+    		"  WHERE e.group_id = ? " +
+    		"    AND e.active = true",
 			nativeQuery = true)
     Integer findNumberOfEmployeesByGroup(final long groupId);
     

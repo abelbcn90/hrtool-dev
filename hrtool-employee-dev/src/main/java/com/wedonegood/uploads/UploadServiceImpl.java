@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageFilter;
+import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
+import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -28,6 +32,7 @@ import com.google.common.net.MediaType;
 @Service
 public class UploadServiceImpl implements UploadService {
 
+	private final static String FOLDER_HOME = "folder.home";
     private final static String FOLDER_UPLOADS = "folder.uploads";
     private final static String FOLDER_PROFILE_PICTURE = "folder.profile.picture";
     private final static String FOLDER_PASSPORT_SCAN = "folder.passport.scan";
@@ -56,7 +61,7 @@ public class UploadServiceImpl implements UploadService {
         
 	    f.getParentFile().mkdirs();
 	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
-	    
+		
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_SMALL, SCALED_SIZE_SMALL), this.getFilePathProfilePicture(
 	    		userId, this.env.getProperty(FILE_NAME_SMALL) + extention), 300);
 	    ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_MEDIUM, SCALED_SIZE_MEDIUM), this.getFilePathProfilePicture(
@@ -73,7 +78,7 @@ public class UploadServiceImpl implements UploadService {
     	final File f = new File(this.getFilePathPassportScan(employeeId, this.env.getProperty(FILE_NAME_PASSPORT_SCAN) + extention));
     	
     	f.getParentFile().mkdirs();
-    	Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    Files.copy(file, f.toPath(), StandardCopyOption.REPLACE_EXISTING);
     	
     	ImageIOUtil.writeImage(this.resizeImage(f, SCALED_SIZE_PREVIEW, SCALED_SIZE_PREVIEW), this.getFilePathPassportScan(
     			employeeId, this.env.getProperty(FILE_NAME_PREVIEW) + extention), 300);
@@ -102,12 +107,12 @@ public class UploadServiceImpl implements UploadService {
     
     @Override
     public String getFilePathProfilePicture(final Long userId, final String fileName) {
-    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PROFILE_PICTURE) + userId + "\\" + fileName;
+    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PROFILE_PICTURE) + userId + "/" + fileName;
     }
     
     @Override
     public String getFilePathPassportScan(final Long employeeId, final String fileName) {
-    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PASSPORT_SCAN) + employeeId + "\\" + fileName;
+    	return this.env.getProperty(FOLDER_UPLOADS) + this.env.getProperty(FOLDER_PASSPORT_SCAN) + employeeId + "/" + fileName;
     }
     
     @Override
@@ -128,26 +133,7 @@ public class UploadServiceImpl implements UploadService {
      * @throws IOException
      */
 	private BufferedImage resizeImage(final File file, final int width, final int height) throws IOException {
-		final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	    final Graphics2D normalGraphics2D = bufferedImage.createGraphics(); //create a graphics object to paint to
-	    normalGraphics2D.setBackground(Color.WHITE);
-	    normalGraphics2D.setPaint(Color.WHITE);
-	    normalGraphics2D.fillRect(0, 0, width, height);
-	    normalGraphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    
-	    final Image image = ImageIO.read(file);
-	    
-	    final Dimension pageSize = new Dimension(image.getWidth(null), image.getHeight(null));
-	    final Dimension boundary = new Dimension(width, height);
-	    
-	    final Dimension pageScaledSize = this.getScaledDimension(pageSize, boundary);
-	    final Double pageWith = pageScaledSize.getWidth();
-	    final Double pageHeight = pageScaledSize.getHeight();
-	    
-	    final int x = (width - pageWith.intValue()) / 2;
-	    normalGraphics2D.drawImage(image, x, 0, pageWith.intValue(), pageHeight.intValue(), null); //draw the image scaled
-		
-		return bufferedImage;
+		return Scalr.resize(ImageIO.read(file), Method.QUALITY, width, height);
 	}
 	
 	/**
@@ -160,58 +146,13 @@ public class UploadServiceImpl implements UploadService {
 	 * @throws IOException
 	 */
 	private BufferedImage resizeImagePdf(final PDFRenderer pdfRenderer, final int width, final int height, final int pageIndex) throws IOException {
-	    final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	    final Graphics2D normalGraphics2D = bufferedImage.createGraphics(); //create a graphics object to paint to
-	    normalGraphics2D.setBackground(Color.WHITE);
-	    normalGraphics2D.setPaint(Color.WHITE);
-	    normalGraphics2D.fillRect(0, 0, width, height);
-	    normalGraphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    
-	    final Image page = pdfRenderer.renderImageWithDPI(pageIndex, 300, ImageType.RGB);
-	    
-	    final Dimension pageSize = new Dimension(page.getWidth(null), page.getHeight(null));
-	    final Dimension boundary = new Dimension(width, height);
-	    
-	    final Dimension pageScaledSize = this.getScaledDimension(pageSize, boundary);
-	    final Double pageWith = pageScaledSize.getWidth();
-	    final Double pageHeight = pageScaledSize.getHeight();
-	    
-	    final int x = (width - pageWith.intValue()) / 2;
-	    normalGraphics2D.drawImage(page, x, 0, pageWith.intValue(), pageHeight.intValue(), null); //draw the image scaled
-		
-		return bufferedImage;
-	}
-	
-	/**
-	 * 
-	 * @param imgSize
-	 * @param boundary
-	 * @return
-	 */
-	private Dimension getScaledDimension(final Dimension imgSize, final Dimension boundary) {
-	    final int original_width = imgSize.width;
-	    final int original_height = imgSize.height;
-	    final int bound_width = boundary.width;
-	    final int bound_height = boundary.height;
-	    int new_width = original_width;
-	    int new_height = original_height;
+	    final Image image = pdfRenderer.renderImageWithDPI(pageIndex, 300, ImageType.RGB);
+	    final BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 
-	    // first check if we need to scale width
-	    if (original_width > bound_width) {
-	        //scale width to fit
-	        new_width = bound_width;
-	        //scale height to maintain aspect ratio
-	        new_height = (new_width * original_height) / original_width;
-	    }
-
-	    // then check if we need to scale even with the new height
-	    if (new_height > bound_height) {
-	        //scale height to fit instead
-	        new_height = bound_height;
-	        //scale width to maintain aspect ratio
-	        new_width = (new_height * original_width) / original_height;
-	    }
-
-	    return new Dimension(new_width, new_height);
+	    final Graphics2D graphics = bufferedImage.createGraphics();
+	    graphics.drawImage(image, 0, 0, null);
+	    graphics.dispose();
+	    
+	    return Scalr.resize(bufferedImage, Method.QUALITY, width, height);
 	}
 }

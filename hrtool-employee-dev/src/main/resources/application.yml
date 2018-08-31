@@ -4,6 +4,7 @@ server:
 
 
 folder:
+  home: /opt/hrtool/
   uploads: uploads/
   profile:
     picture: profilePicture/
@@ -21,6 +22,8 @@ file:
     medium: medium
     big: big
     preview: preview
+    cities: cities.json
+    countries: countries.json
     
   size:
     small: 44

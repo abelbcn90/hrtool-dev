@@ -52,7 +52,7 @@ public class GroupServiceImpl implements GroupService {
     
     @Override
     public List<Groups> listAllByClientId(final Long clientId) {
-    	return this.groupRepository.findAllByClientIdAndActiveIsTrue(clientId);
+    	return this.groupRepository.findAllByClientIdAndActiveIsTrueOrderByIdDesc(clientId);
     }
     
     @Override
