@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.wedonegood.common.user.api.model.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findOneByUserEmail(String email);
+    User findOneByUserEmailAndActiveIsTrue(String email);
     
     @Query(value = "SELECT DISTINCT u.* " + 
     		"  FROM user u " + 

@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User getUserByUserEmail(final String email) {
-        return this.userRepository.findOneByUserEmail(email);
+        return this.userRepository.findOneByUserEmailAndActiveIsTrue(email);
     }
 
     public User getUserByUserId(final long id) {
