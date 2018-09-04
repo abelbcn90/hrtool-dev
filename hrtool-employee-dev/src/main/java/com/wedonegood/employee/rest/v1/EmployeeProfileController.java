@@ -70,8 +70,8 @@ public class EmployeeProfileController extends PagingController {
         }
         
         employee.setAddress(employeeDto.getAddress());
-        employee.setCountry(this.countryService.findCountryByCode(employeeDto.getCountry().getCode()));
-//        employee.setCity(this.cityService.findCityById(employeeDto.getCity().getId()));
+        employee.setCountry(this.countryService.findCountryByCode(employeeDto.getCountry().getCountryCode()));
+        employee.setCity(this.cityService.findCityById(employeeDto.getCity().getCityId()));
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
         

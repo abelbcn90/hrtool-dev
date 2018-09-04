@@ -17,6 +17,7 @@ import com.wedonegood.contract.ContractService;
 import com.wedonegood.employee.api.EmployeeService;
 import com.wedonegood.employee.api.model.entity.Employee;
 import com.wedonegood.employee.rest.v1.CityService;
+import com.wedonegood.employee.rest.v1.CountryService;
 import com.wedonegood.employee.rest.v1.dto.EmployeeDto;
 import com.wedonegood.groups.api.GroupService;
 import com.wedonegood.permit.PermitService;
@@ -60,6 +61,9 @@ public class EmployeeWebController {
 	@Autowired
 	private CityService cityService;
 	
+	@Autowired
+	private CountryService countryService;
+	
 	@GetMapping("")
     public String index(final Model model) {
 		model.addAttribute("employeeList", this.employeeService.getEmployees(UserInfoContext.getCurrent().getClientId(), PageRequest.of(0, 10, Sort.Direction.ASC, "id")));
@@ -80,6 +84,7 @@ public class EmployeeWebController {
 		model.addAttribute("roleList", this.roleService.findAllByClientIdAndActiveIsTrue(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("managerList", this.userService.findManagers(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("cityList", this.cityService.getCities());
+		model.addAttribute("countryList", this.countryService.getCountries());
 		
 		System.out.println("New Employee");
 		
@@ -102,6 +107,7 @@ public class EmployeeWebController {
 		model.addAttribute("userRoleList", this.userRoleService.findAllByUserIdAndActiveIsTrue(employee.getUser().getId()));
 		model.addAttribute("managerList", this.userService.findManagers(UserInfoContext.getCurrent().getClientId()));
 		model.addAttribute("cityList", this.cityService.getCities());
+		model.addAttribute("countryList", this.countryService.getCountries());
 		
 		System.out.println("Edit Employee");
 		

@@ -59,7 +59,7 @@ public class UploadController {
             @ApiResponse(code = 401, message = "Access denied")}
     )
 	public ResponseEntity<String> createProfilePicture(@PathVariable("userId") final Long userId, @RequestPart(required = true) MultipartFile file) throws IOException {
-    	final String path = this.uploadService.createProfilePicture(userId, file.getContentType(), file.getInputStream());
+    	final String path = this.uploadService.createProfilePicture(userId, file.getInputStream());
     	
         final User user = this.userService.getUserByUserId(userId);
     	user.setProfilePicture(path);
@@ -80,9 +80,9 @@ public class UploadController {
     	String path = "";
     	
     	if (!file.getContentType().equals(MediaType.APPLICATION_PDF_VALUE)) {
-    		path = this.uploadService.createPassportScan(employeeId, file.getContentType(), file.getInputStream());
+    		path = this.uploadService.createPassportScan(employeeId, file.getInputStream());
     	} else {
-    		path = this.uploadService.createPassportScanPdf(employeeId, file.getContentType(), file.getInputStream());
+    		path = this.uploadService.createPassportScanPdf(employeeId, file.getInputStream());
     	}
     	
     	final Employee employee = this.employeeService.get(employeeId);

@@ -89,6 +89,12 @@ public class EmployeeController extends PagingController {
 	@Autowired
 	private TimesheetService timesheetService;
 	
+	@Autowired
+	private CityService cityService;
+	
+	@Autowired
+	private CountryService countryService;
+	
 	@GetMapping("/list/{page}")
     @ApiOperation(value = "Get employees", nickname = "getEmployees")
     @ApiResponses(value = {
@@ -161,8 +167,8 @@ public class EmployeeController extends PagingController {
         employee.setNumber(employeeDto.getNumber());
         employee.setNin(employeeDto.getNin());
         employee.setAddress(employeeDto.getAddress());
-        employee.setCountry(employeeDto.getCountry());
-        employee.setCity(employeeDto.getCity());
+        employee.setCountry(this.countryService.findCountryByCode(employeeDto.getCountry().getCountryCode()));
+        employee.setCity(this.cityService.findCityById(employeeDto.getCity().getCityId()));
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
         employee.setManager(this.userService.getUserByUserId(employeeDto.getManager().getUserId()));
@@ -236,8 +242,8 @@ public class EmployeeController extends PagingController {
         employee.setNumber(employeeDto.getNumber());
         employee.setNin(employeeDto.getNin());
         employee.setAddress(employeeDto.getAddress());
-        employee.setCountry(employeeDto.getCountry());
-        employee.setCity(employeeDto.getCity());
+        employee.setCountry(this.countryService.findCountryByCode(employeeDto.getCountry().getCountryCode()));
+        employee.setCity(this.cityService.findCityById(employeeDto.getCity().getCityId()));
         employee.setPostalCode(employeeDto.getPostalCode());
         employee.setBirthday(employeeDto.getBirthday());
         employee.setManager(this.userService.getUserByUserId(employeeDto.getManager().getUserId()));

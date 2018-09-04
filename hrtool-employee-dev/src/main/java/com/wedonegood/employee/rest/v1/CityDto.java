@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class CityDto {
 
 	@ApiModelProperty(value = "City id", allowEmptyValue = true, example = "432", position = 1, notes = "empty to create new city")
-    private Long id;
+    private Long cityId;
 	
 	@ApiModelProperty(value = "City name", position = 2)
 	private String name;
@@ -27,8 +27,12 @@ public class CityDto {
     	
     }
     
+    public CityDto(final Long id) {
+    	this.cityId = id;
+    }
+    
     public CityDto(final City city) {
-    	this.id = city.getId();
+    	this.cityId = city.getId();
 		this.name = city.getName();
 		this.country = new CountryDto(city.getCountry());
     }
@@ -38,19 +42,19 @@ public class CityDto {
 	 */
 
 	/**
-	 * @return the id
+	 * @return the cityId
 	 */
-	public Long getId() {
-		return id;
+	public Long getCityId() {
+		return cityId;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param cityId the cityId to set
 	 */
-	public void setId(Long id) {
-		this.id = id;
+	public void setCityId(Long cityId) {
+		this.cityId = cityId;
 	}
-	
+
 	/**
 	 * @return the name
 	 */

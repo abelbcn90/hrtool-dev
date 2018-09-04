@@ -67,10 +67,16 @@
 					<input type="text" placeholder="Address" th:field="*{employee.address}" />
 				</div>
 				<div>
-					<input type="text" placeholder="Country" th:field="*{employee.country}" />
+<!-- 					<input type="text" placeholder="Country" th:field="*{employee.country}" /> -->
+					<select th:field="*{employee.country}" th:remove="all-but-first">
+		                <option th:each="c : ${countryList}" th:value="${c.code}" th:text="${c.name}">City</option>
+		            </select>
 				</div>
 				<div>
-					<input type="text" placeholder="City" th:field="*{employee.city}" />
+<!-- 					<input type="text" placeholder="City" th:field="*{employee.city}" /> -->
+					<select th:field="*{employee.city}" th:remove="all-but-first">
+		                <option th:each="c : ${cityList}" th:value="${c.id}" th:text="${c.name}">City</option>
+		            </select>
 				</div>
 				<div>
 					<input type="text" placeholder="Postal code" th:field="*{employee.postalCode}" />
@@ -297,80 +303,82 @@
 		$( "#update" ).on( "click", function( event ) {
 			alert('Update Employee');
 
-			var formDataJson = ' { '
-				+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
-		      	+ ', "user" : '
-			      	+ ' { '
-			      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
-				      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
-			      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-				      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-				      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
-				      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
-				      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
-			      	+ ' } '
-		      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
-	    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
-			    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
-			    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
-			    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
-			    + ', "country" : "' + $('#editEmployeeForm').find('#country').val() + '"'
-			    + ', "city" : '
-	    		+ ' { '
-	    			+ '"cityId" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
-	    			+ '"name" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
-	    		+ ' } '
-			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
-			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
-// 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
-// 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
-			    + ', "manager" : '
-		    		+ ' { '
-		    			+ '"userId" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
-		    		+ ' } '
-			    // Job details
-			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
-			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
-			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
-			    + ', "billingId" : "' + $('#editEmployeeForm').find('#billingId').val() + '"'
-			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
-			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
-			    + ', "group" : '
-		    		+ ' { '
-		    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
-		    		+ ' } '
-			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
-			    // User Role
-			    + ', "roles" : '
-			    	+ ' [ '
-			    		+ ' { '
-			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
-		    			+ ' } '
-			    		+ ', { '
-			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role2').val() + '"'
-		    			+ ' } '
-	    			+ ' ] '
-	      	+ ' } ';
+// 			var formDataJson = ' { '
+// 				+ '"employeeId" : "' + $('#editEmployeeForm').find('#employeeId').val() + '"'
+// 		      	+ ', "user" : '
+// 			      	+ ' { '
+// 			      		+ '"userId" : "' + $('#editEmployeeForm').find('#userId').val() + '"'
+// 				      	+ ', "userEmail" : "' + $('#editEmployeeForm').find('#userEmail').val() + '"'
+// 			      		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+// 				      	+ ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+// 				      	+ ', "userPhone" : "' + $('#editEmployeeForm').find('#userPhone').val() + '"'
+// 				      	+ ', "languageCode" : "' + $('#editEmployeeForm').find('#language').val() + '"'
+// 				      	+ ', "password" : "' + $('#editEmployeeForm').find('#password').val() + '"'
+// 			      	+ ' } '
+// 		      	+ ', "number" : "' + $('#editEmployeeForm').find('#number').val() + '"'
+// 	    		+ ', "userFirstName" : "' + $('#editEmployeeForm').find('#userFirstName').val() + '"'
+// 			    + ', "userLastName" : "' + $('#editEmployeeForm').find('#userLastName').val() + '"'
+// 			    + ', "nin" : "' + $('#editEmployeeForm').find('#nin').val() + '"'
+// 			    + ', "address" : "' + $('#editEmployeeForm').find('#address').val() + '"'
+// 			    + ', "country" : '
+// 	    		+ ' { '
+// 	    			+ '"countryCode" : "' + $('#editEmployeeForm').find('#country').val() + '"'
+// 	    		+ ' } '
+// 			    + ', "city" : '
+// 	    		+ ' { '
+// 	    			+ '"cityId" : "' + $('#editEmployeeForm').find('#city').val() + '"'
+// 	    		+ ' } '
+// 			    + ', "postalCode" : "' + $('#editEmployeeForm').find('#postalCode').val() + '"'
+// 			    + ', "birthday" : "' + $('#editEmployeeForm').find('#birthday').val() + '"'
+// // 			    + ', "passportScan" : "' + $('#editEmployeeForm').find('#filePassportScan')[0].files[0].name + '"'
+// // 			    + ', "profilePicture" : "' + $('#editEmployeeForm').find('#fileProfilePicture').val() + '"'
+// 			    + ', "manager" : '
+// 		    		+ ' { '
+// 		    			+ '"userId" : "' + $('#editEmployeeForm').find('#manager').val() + '"'
+// 		    		+ ' } '
+// 			    // Job details
+// 			    + ', "permitId" : "' + $('#editEmployeeForm').find('#permitId').val() + '"'
+// 			    + ', "contractId" : "' + $('#editEmployeeForm').find('#contractId').val() + '"'
+// 			    + ', "jobPosition" : "' + $('#editEmployeeForm').find('#jobPosition').val() + '"'
+// 			    + ', "billingId" : "' + $('#editEmployeeForm').find('#billingId').val() + '"'
+// 			    + ', "hireDate" : "' + $('#editEmployeeForm').find('#hireDate').val() + '"'
+// 			    + ', "salary" : "' + $('#editEmployeeForm').find('#salary').val() + '"'
+// 			    + ', "group" : '
+// 		    		+ ' { '
+// 		    			+ '"groupId" : "' + $('#editEmployeeForm').find('#group').val() + '"'
+// 		    		+ ' } '
+// 			    + ', "vacationAllowance" : "'+ $('#editEmployeeForm').find('#vacationAllowance').val() + '"'
+// 			    // User Role
+// 			    + ', "roles" : '
+// 			    	+ ' [ '
+// 			    		+ ' { '
+// 			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role').val() + '"'
+// 		    			+ ' } '
+// 			    		+ ', { '
+// 			    			+ '"roleId" : "' + $('#editEmployeeForm').find('#role2').val() + '"'
+// 		    			+ ' } '
+// 	    			+ ' ] '
+// 	      	+ ' } ';
 	      	
-		    console.log(formDataJson);
+// 		    console.log(formDataJson);
 
-			jQuery.ajax({
-				method: 'PATCH',
-				headers: {
-					'X-Auth-Client': '1'
-				},
-				data: formDataJson,
-				dataType: 'json',
-				contentType: 'application/json',
-				url: "/api/v1/employee/",
-				error : function(err) {
-					console.log('Error!');
-					console.log(err);
-				},
-				success: function(data) {
-					alert("success: " + data);
-				}
-			});
+// 			jQuery.ajax({
+// 				method: 'PATCH',
+// 				headers: {
+// 					'X-Auth-Client': '1'
+// 				},
+// 				data: formDataJson,
+// 				dataType: 'json',
+// 				contentType: 'application/json',
+// 				url: "/api/v1/employee/",
+// 				error : function(err) {
+// 					console.log('Error!');
+// 					console.log(err);
+// 				},
+// 				success: function(data) {
+// 					alert("success: " + data);
+// 				}
+// 			});
 			
 
 		    if ($('#editEmployeeForm').find('#fileProfilePicture')[0].files.length > 0) {

@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class CountryDto {
 
 	@ApiModelProperty(value = "Country code", allowEmptyValue = true, example = "ES", position = 1, notes = "empty to create new country")
-    private String code;
+    private String countryCode;
 	
 	@ApiModelProperty(value = "Country name", position = 2)
 	private String name;
@@ -24,8 +24,12 @@ public class CountryDto {
     	
     }
     
+    public CountryDto(final String countryCode) {
+    	this.countryCode = countryCode;
+    }
+    
     public CountryDto(final Country country) {
-    	this.code = country.getCode();
+    	this.countryCode = country.getCode();
     	this.name = country.getName();
     }
     
@@ -34,19 +38,19 @@ public class CountryDto {
 	 */
 
 	/**
-	 * @return the code
+	 * @return the countryCode
 	 */
-	public String getCode() {
-		return code;
+	public String getCountryCode() {
+		return countryCode;
 	}
 
 	/**
-	 * @param code the code to set
+	 * @param countryCode the countryCode to set
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
-	
+
 	/**
 	 * @return the name
 	 */

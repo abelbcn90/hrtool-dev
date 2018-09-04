@@ -36,10 +36,12 @@ public class Employee extends BaseEntity {
     @Column(nullable = true)
     private String address;
     
-    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "country_code")
     private Country country;
     
-    @Column(nullable = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id")
     private City city;
     
     @Column(nullable = true)
