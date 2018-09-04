@@ -15,16 +15,16 @@ spring:
     username: dev
     password: Dev1234!
     driver-class-name: com.mysql.jdbc.Driver
-  show-sql: true
-  format_sql: true
+  show-sql: false
+  format_sql: false
 
 # Hibernate logs
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type: trace
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: debug
+#        type: trace
 
 
 # Clickatell configuration

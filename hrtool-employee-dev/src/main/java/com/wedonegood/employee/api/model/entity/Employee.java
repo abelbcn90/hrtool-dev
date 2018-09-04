@@ -14,6 +14,8 @@ import com.wedonegood.billing.Billing;
 import com.wedonegood.common.user.api.model.entity.User;
 import com.wedonegood.contract.Contract;
 import com.wedonegood.employee.model.common.BaseEntity;
+import com.wedonegood.employee.rest.v1.City;
+import com.wedonegood.employee.rest.v1.Country;
 import com.wedonegood.groups.api.model.entity.Groups;
 import com.wedonegood.permit.Permit;
 import com.wedonegood.roles.api.model.entity.Role;
@@ -35,10 +37,10 @@ public class Employee extends BaseEntity {
     private String address;
     
     @Column(nullable = true)
-    private String country;
+    private Country country;
     
     @Column(nullable = true)
-    private String city;
+    private City city;
     
     @Column(nullable = true)
     private String postalCode;
@@ -152,28 +154,28 @@ public class Employee extends BaseEntity {
 	/**
 	 * @return the country
 	 */
-	public String getCountry() {
+	public Country getCountry() {
 		return country;
 	}
 
 	/**
 	 * @param country the country to set
 	 */
-	public void setCountry(String country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 
 	/**
 	 * @return the city
 	 */
-	public String getCity() {
+	public City getCity() {
 		return city;
 	}
 
 	/**
 	 * @param city the city to set
 	 */
-	public void setCity(String city) {
+	public void setCity(City city) {
 		this.city = city;
 	}
 

@@ -1,43 +1,36 @@
 package com.wedonegood.employee.rest.v1;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Abel Pulido Ponce
  *
  */
-@Entity
-public class City {
+@ApiModel
+public class CityDto {
 
-	@Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+	@ApiModelProperty(value = "City id", allowEmptyValue = true, example = "432", position = 1, notes = "empty to create new city")
     private Long id;
 	
-	@Column(nullable = false)
+	@ApiModelProperty(value = "City name", position = 2)
 	private String name;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "country_code")
-	private Country country;
+	@ApiModelProperty(value = "City country", position = 3)
+	private CountryDto country;
     
     /*
      * Constructors
      */
     
-    public City() {
+    public CityDto() {
     	
     }
     
-    public City(final Country country, final String name) {
-    	this.country = country;
-    	this.name = name;
+    public CityDto(final City city) {
+    	this.id = city.getId();
+		this.name = city.getName();
+		this.country = new CountryDto(city.getCountry());
     }
 
     /*
@@ -75,14 +68,14 @@ public class City {
 	/**
 	 * @return the country
 	 */
-	public Country getCountry() {
+	public CountryDto getCountry() {
 		return country;
 	}
 
 	/**
 	 * @param country the country to set
 	 */
-	public void setCountry(Country country) {
+	public void setCountry(CountryDto country) {
 		this.country = country;
 	}
 }

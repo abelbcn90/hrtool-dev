@@ -1,12 +1,20 @@
 package com.wedonegood.employee.rest.v1;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,6 +31,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import net.minidev.json.parser.JSONParser;
 
 /**
  * 
@@ -41,47 +50,86 @@ public class CitiesController {
 	@Autowired
 	private Environment env;
 	
-	@GetMapping("/list")
-	@ApiOperation(value = "Get cities", nickname = "listCities")
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "List of cities", response = String[].class, responseContainer = "List")
-	})
-	public ResponseEntity<List<City>> listCities() throws JsonParseException, JsonMappingException, IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-//		final List<City> citiesList = mapper.readValue(new ClassPathResource(this.env.getProperty(FILE_NAME_CITIES)).getFile(), new TypeReference<List<City>>(){});
-		final List<City> citiesList = mapper.readValue(new File(this.env.getProperty(FOLDER_HOME) + this.env.getProperty(FILE_NAME_CITIES)), new TypeReference<List<City>>(){});
-		
-		return ResponseEntity.ok(citiesList);
-	}
+	@Autowired
+	private CountryService countryService;
 	
-	@GetMapping("/list/{countryCode}")
+	@Autowired
+	private CityService cityService;
+	
+//	@GetMapping({"/list/", "/list/{countryCode}"})
+//    @ApiOperation(value = "Filter cities", nickname = "filterCities")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "List of cities filtered by country code", response = CityDto[].class, responseContainer = "List")
+//    })
+//    public ResponseEntity<List<CityDto>> filterCities(@PathVariable(value="countryCode", required = false) final Optional<String> countryCode) throws JsonParseException, JsonMappingException, IOException {
+//		List<City> cityList = this.cityService.getCities();
+//		
+//		if (null == cityList) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        
+//		if (countryCode.isPresent()) {
+//			cityList = this.cityService.getCitiesByCountryCode(countryCode.get());
+//		}
+//		
+//		final List<CityDto> cityDtoList = new ArrayList<CityDto>();
+//        for (final City c : cityList) {
+//        	cityDtoList.add(new CityDto(c));
+//        }
+//		
+//        return ResponseEntity.ok(cityDtoList);
+//    }
+	
+	@GetMapping({"/list/", "/list/{countryCode}"})
     @ApiOperation(value = "Filter cities", nickname = "filterCities")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of cities filtered by country code", response = String[].class, responseContainer = "List")
+            @ApiResponse(code = 200, message = "List of cities filtered by country code", response = CityJson[].class, responseContainer = "List")
     })
-    public ResponseEntity<List<City>> filterCities(@PathVariable("countryCode") final String countryCode) throws JsonParseException, JsonMappingException, IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-//		List<City> citiesList = mapper.readValue(new ClassPathResource(this.env.getProperty(FILE_NAME_CITIES)).getFile(), new TypeReference<List<City>>(){});
-		List<City> citiesList = mapper.readValue(new File(this.env.getProperty(FOLDER_HOME) + this.env.getProperty(FILE_NAME_CITIES)), new TypeReference<List<City>>(){});
-
-		citiesList = citiesList.stream().filter(city -> city.getCountry().equalsIgnoreCase(countryCode)).collect(Collectors.toList());
+    public ResponseEntity<List<CityJson>> filterCities(@PathVariable(value="countryCode", required = false) final Optional<String> countryCode) throws Exception {
+		String csvFile = "subdivision-codes_csv.csv";
+        String line = "";
+        String cvsSplitBy = ",";
         
-        return ResponseEntity.ok(citiesList);
+        List<City> cityList = new ArrayList<City>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource(csvFile).getFile()))) {
+
+            while ((line = br.readLine()) != null) {
+
+                // use comma as separator
+                String[] country = line.split(cvsSplitBy);
+
+                System.out.println("Country [code= " + country[0] + " , name=" + country[2] + "]");
+                cityList.add(new City(new Country(country[0]), country[2]));
+            }
+        }
+        
+        this.cityService.saveAll(cityList);
+        
+        return ResponseEntity.ok(null);
     }
 	
 	@GetMapping("/list/{countryCode}/{name}")
 	@ApiOperation(value = "Filter cities", nickname = "filterCitiesByName")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "List of cities filtered by country code", response = String[].class, responseContainer = "List")
+			@ApiResponse(code = 200, message = "List of cities filtered by country code", response = CityDto[].class, responseContainer = "List")
 	})
-	public ResponseEntity<List<City>> filterCitiesByName(@PathVariable("countryCode") final String countryCode, @PathVariable("name") final String name) throws JsonParseException, JsonMappingException, IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-//		List<City> citiesList = mapper.readValue(new ClassPathResource(this.env.getProperty(FILE_NAME_CITIES)).getFile(), new TypeReference<List<City>>(){});
-		List<City> citiesList = mapper.readValue(new File(this.env.getProperty(FOLDER_HOME) + this.env.getProperty(FILE_NAME_CITIES)), new TypeReference<List<City>>(){});
+	public ResponseEntity<List<CityDto>> filterCitiesByName(@PathVariable("countryCode") final Optional<String> countryCode, @PathVariable("name") final Optional<String> name) throws JsonParseException, JsonMappingException, IOException {
+		List<City> cityList = this.cityService.getCities();
 		
-		citiesList = citiesList.stream().filter(city -> city.getCountry().equalsIgnoreCase(countryCode)).collect(Collectors.toList());
-		citiesList = citiesList.stream().filter(city -> city.getName().toUpperCase().startsWith(name.toUpperCase())).collect(Collectors.toList());
+		if (null == cityList) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        
+		if (countryCode.isPresent() && name.isPresent()) {
+			cityList = this.cityService.getCitiesByCountryCodeAndName(countryCode.get(), name.get());
+		}
 		
-		return ResponseEntity.ok(citiesList);
+		final List<CityDto> cityDtoList = new ArrayList<CityDto>();
+        for (final City c : cityList) {
+        	cityDtoList.add(new CityDto(c));
+        }
+		
+        return ResponseEntity.ok(cityDtoList);
 	}
 }

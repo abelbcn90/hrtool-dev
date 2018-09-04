@@ -1,6 +1,5 @@
 package com.wedonegood.employee.rest.v1;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -230,9 +229,8 @@ public class EmployeeController extends PagingController {
 		
         if (null != employeeDto.getUser().getPassword() && !employeeDto.getUser().getPassword().isEmpty()) {
         	this.userService.changePassword(employee.getUser().getId(), employeeDto.getUser().getPassword());
+        	employee.getUser().setUserChangePwd(false);
         }
-        
-        employee.getUser().setUserChangePwd(false);
         
         // Employee
         employee.setNumber(employeeDto.getNumber());

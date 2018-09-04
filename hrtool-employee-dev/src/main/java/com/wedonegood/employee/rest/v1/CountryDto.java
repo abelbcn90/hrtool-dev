@@ -1,40 +1,32 @@
 package com.wedonegood.employee.rest.v1;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.validation.constraints.Size;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Abel Pulido Ponce
  *
  */
-@Entity
-public class Country {
+@ApiModel
+public class CountryDto {
 
-	@Id
-	@Size(max = 2)
-	@Column(unique = true, nullable = false)
+	@ApiModelProperty(value = "Country code", allowEmptyValue = true, example = "ES", position = 1, notes = "empty to create new country")
     private String code;
 	
-	@Column(unique = true, nullable = false)
+	@ApiModelProperty(value = "Country name", position = 2)
 	private String name;
 	
     /*
      * Constructors
      */
     
-    public Country() {
+    public CountryDto() {
     	
     }
     
-    public Country(final String code) {
-    	this.code = code;
-    }
-    
-    public Country(final String code, final String name) {
-    	this.code = code;
-    	this.name = name;
+    public CountryDto(final Country country) {
+    	this.code = country.getCode();
+    	this.name = country.getName();
     }
     
     /*

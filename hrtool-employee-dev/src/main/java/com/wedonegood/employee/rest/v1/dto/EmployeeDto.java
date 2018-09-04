@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.wedonegood.common.user.rest.dto.UserDto;
 import com.wedonegood.employee.api.model.entity.Employee;
+import com.wedonegood.employee.rest.v1.CityDto;
+import com.wedonegood.employee.rest.v1.CountryDto;
 import com.wedonegood.groups.rest.v1.dto.GroupDto;
 import com.wedonegood.roles.api.model.entity.Role;
 import com.wedonegood.roles.rest.v1.dto.RoleDto;
@@ -33,10 +35,10 @@ public class EmployeeDto {
     private String address;
     
     @ApiModelProperty(value = "Employee country", position = 6)
-    private String country;
+    private CountryDto country;
     
     @ApiModelProperty(value = "Employee city", position = 7)
-    private String city;
+    private CityDto city;
     
     @ApiModelProperty(value = "Employee postalCode", position = 8)
     private String postalCode;
@@ -112,8 +114,8 @@ public class EmployeeDto {
     	this.number = employee.getNumber();
     	this.nin = employee.getNin();
     	this.address = employee.getAddress();
-    	this.country = employee.getCountry();
-    	this.city = employee.getCity();
+    	this.country = new CountryDto(employee.getCountry());
+    	this.city = new CityDto(employee.getCity());
     	this.postalCode = employee.getPostalCode();
     	this.birthday = employee.getBirthday();
     	this.passportScan = employee.getPassportScan();
@@ -221,28 +223,28 @@ public class EmployeeDto {
 	/**
 	 * @return the country
 	 */
-	public String getCountry() {
+	public CountryDto getCountry() {
 		return country;
 	}
 
 	/**
 	 * @param country the country to set
 	 */
-	public void setCountry(String country) {
+	public void setCountry(CountryDto country) {
 		this.country = country;
 	}
 
 	/**
 	 * @return the city
 	 */
-	public String getCity() {
+	public CityDto getCity() {
 		return city;
 	}
 
 	/**
 	 * @param city the city to set
 	 */
-	public void setCity(String city) {
+	public void setCity(CityDto city) {
 		this.city = city;
 	}
 
