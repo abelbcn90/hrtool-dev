@@ -80,13 +80,13 @@ public class EmployeeProfileController extends PagingController {
         return ResponseEntity.ok(new EmployeeDto(employee));
     }
 	
-	@GetMapping(value = "/{employeeId}", produces = "application/json")
-    @ApiOperation(value = "Get employee's profile data", nickname = "getEmployeeProfileById")
+	@GetMapping(value = "/{userId}", produces = "application/json")
+    @ApiOperation(value = "Get employee's profile data", nickname = "getEmployeeProfileByUserId")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get Employee's profile", response = EmployeeDto.class)
     })
-    public ResponseEntity<EmployeeDto> getEmployeeProfile(@PathVariable("employeeId") final Long employeeId) {
-		final Employee employee = this.employeeService.get(employeeId);
+    public ResponseEntity<EmployeeDto> getEmployeeProfile(@PathVariable("userId") final Long userId) {
+		final Employee employee = this.employeeService.getEmployee(userId);
 
         if (null == employee) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

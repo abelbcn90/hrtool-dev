@@ -1,15 +1,8 @@
 package com.wedonegood.uploads;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
-import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +13,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.imgscalr.Scalr;
@@ -137,8 +129,28 @@ public class UploadServiceImpl implements UploadService {
      * @throws IOException
      */
 	private BufferedImage resizeImage(final BufferedImage originalImage, final int width, final int height) throws IOException {
-		int originalWidth = originalImage.getWidth();
-	    int originalHeight = originalImage.getHeight();
+		Image image = originalImage;
+		
+		if (originalImage.getWidth() > originalImage.getHeight()) {
+	    	System.out.println("WIDTH");
+	    	image = originalImage.getScaledInstance(-1, height, Image.SCALE_DEFAULT);
+	    	
+	    } else if (originalImage.getWidth() < originalImage.getHeight()) {
+	    	System.out.println("WIDTH");
+	    	image = originalImage.getScaledInstance(width, -1, Image.SCALE_DEFAULT);
+	    } else {
+	    	return Scalr.resize(originalImage, Method.QUALITY, width, height);
+	    }
+		
+	    BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+	    // Draw the image on to the buffered image
+	    Graphics2D bGr = bufferedImage.createGraphics();
+	    bGr.drawImage(image, 0, 0, null);
+	    bGr.dispose();
+		
+		int originalWidth = bufferedImage.getWidth();
+	    int originalHeight = bufferedImage.getHeight();
 
 	    int newWidth;
 	    int newHeight;
@@ -158,28 +170,19 @@ public class UploadServiceImpl implements UploadService {
 	        newWidth = (int) Math.round(aspectRatio * newHeight);
 	    }
 
-	    int xOffset = (width - newWidth) / 2;
-	    int yOffset = (height - newHeight) / 2;
-		
-		BufferedImage intermediateImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	    Graphics2D gi = intermediateImage.createGraphics();
-	    gi.setComposite(AlphaComposite.SrcOver);
-	    gi.setColor(Color.WHITE);
-	    gi.fillRect(0, 0, width, height);
-	    gi.drawImage(originalImage, xOffset, yOffset, xOffset + newWidth, yOffset + newHeight, 0, 0, originalWidth, originalHeight, Color.WHITE, null);
-	    gi.dispose();
+	    int xOffset = (originalWidth - newWidth) / 2;
+	    int yOffset = (originalHeight - newHeight) / 2;
 	    
-		Image intermediateWithTransparentPixels = makeColorTransparent(intermediateImage, Color.WHITE);
-		
-		BufferedImage finalImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	    Graphics2D gf = finalImage.createGraphics();
-	    gf.setComposite(AlphaComposite.SrcOver);
-	    gf.setColor(new Color(0, 0, 0, 0));
-	    gf.fillRect(0, 0, width, height);
-	    gf.drawImage(intermediateWithTransparentPixels, 0, 0, width, height, new Color(0, 0, 0, 0), null);
-	    gf.dispose();
-
-	    return finalImage;
+	    BufferedImage bufferedImageResult = bufferedImage;
+	    
+	    if (originalWidth > originalHeight) {
+	    	bufferedImageResult = bufferedImage.getSubimage(xOffset, 0, width, originalHeight);
+	    	
+	    } else if (originalWidth < originalHeight) {
+	    	bufferedImageResult = bufferedImage.getSubimage(0, yOffset, originalWidth, height);
+	    }
+	    
+	    return bufferedImageResult;
 	}
 	
 	/**
@@ -195,31 +198,5 @@ public class UploadServiceImpl implements UploadService {
 		final BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(pageIndex, 300);
 
 	    return this.resizeImage(bufferedImage, width, height);
-	}
-	
-	/**
-	 * 
-	 * @param im
-	 * @param color
-	 * @return
-	 */
-	public static Image makeColorTransparent(Image im, final Color color) {
-	    ImageFilter filter = new RGBImageFilter() {
-	        // the color we are looking for... Alpha bits are set to opaque
-	        public int markerRGB = color.getRGB() | 0xFF000000;
-
-	        public final int filterRGB(int x, int y, int rgb) {
-	            if ((rgb | 0xFF000000) == markerRGB) {
-	                // Mark the alpha bits as zero - transparent
-	                return 0x00FFFFFF & rgb;
-	            } else {
-	                // nothing to do
-	                return rgb;
-	            }
-	        }
-	    };
-
-	    ImageProducer ip = new FilteredImageSource(im.getSource(), filter);
-	    return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 }

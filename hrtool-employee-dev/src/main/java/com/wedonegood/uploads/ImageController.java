@@ -136,7 +136,7 @@ public class ImageController {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         
-        final File file = new File(this.uploadService.getFilePathPassportScan(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + "." + com.google.common.net.MediaType.JPEG.subtype()));
+        final File file = new File(this.uploadService.getFilePathPassportScan(employee.getId(), this.env.getProperty(FILE_NAME_PREVIEW) + "." + com.google.common.net.MediaType.PNG.subtype()));
         final String contentType = Files.probeContentType(file.toPath());
         final InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
         
